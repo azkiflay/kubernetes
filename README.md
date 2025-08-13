@@ -5,6 +5,7 @@
   - [VirtualBox Installation on Ubuntu 24.04 LTS](#virtualbox-installation-on-ubuntu-2404-lts)
   - [Minikube Installation](#minikube-installation)
   - [Kubernetes Client (kubectl) Installation](#kubernetes-client-kubectl-installation)
+  - [Installing K8s Dashboard](#installing-k8s-dashboard)
 - [Tools and Terminology](#tools-and-terminology)
 - [References](#references)
 # Introduction
@@ -87,7 +88,7 @@ Figure 1 shows a message that is displayed when starting Minikube following a su
     # View version of installed kubectl
     kubectl version --client
     kubectl version --client --output=yaml
-    rm kubectl # Remove the downloaded kubectl installer
+    rm kubectl # Remove the downloaded kubectl installerku
     rm kubectl.sha256 # Remove the downloaded kubectl checksum
 ```
 Figure 2 displays the results of executing the above kubectl installation commands.
@@ -101,7 +102,37 @@ Figure 2 displays the results of executing the above kubectl installation comman
     kubectl get componentstatuses
     kubectl get nodes
     kubectl describe nodes minikube
+    kubectl get deployments --namespace=kube-system coredns # K8s DNS
+    # kubectl get services --namespace=kube-system coredns # TODO: load balancing for the DNS server. Error: "coredns" not found
 ```
+
+## Installing K8s Dashboard
+[Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/) is a web-based interface for K8s. It can be used to deploy and manage cluster resources.
+First, install [Helm](https://helm.sh/docs/intro/install/), which is the K8s package manager, as follows.
+```bash
+    curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+    sudo apt-get install apt-transport-https --yes
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+    sudo apt-get update
+    sudo apt-get install helm
+
+```
+
+Subsequently, use **helm** to deploy the Dashboard User Interface (UI), as follow. Note that it is deployed by default when Minikube is installed.
+```bash
+    # Add kubernetes-dashboard repository
+    helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+    # Deploy a Helm Release named "kubernetes-dashboard" using the kubernetes-dashboard chart
+    helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard # If kubernetes-dashboard-csrf exists error, first run "kubectl delete secret kubernetes-dashboard-csrf -n kubernetes-dashboard"
+```
+
+As can be seen in Figure 3, after the **helm** package manager finishes installing the Dashboard, a link to access it is given. In this case, that link is **https://localhost:8443**.
+
+<p align="center">
+  <img src="figures/dashboard_install_1.png" style="max-width:50%; height:auto;">
+</p>
+<p align="center"><strong>Figure 1:</strong> Dashboard installation </p>
+
 
 # Tools and Terminology
 * **Pod**: a number of containers that have the same Linux *namespace*, *cgroups*, *storage* and *network* resources.
