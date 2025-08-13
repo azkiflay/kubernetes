@@ -1,3 +1,4 @@
+**Contents**
 - [Introduction](#introduction)
 - [Terminology](#terminology)
 - [Installation](#installation)
@@ -47,22 +48,50 @@ Kubernetes orchestrates the deployment of containerized applications. It is an [
 
 ## VirtualBox Installation on Ubuntu 24.04 LTS
 <!-- TODO: Address redundancy by putting a link to github.com/azkiflay/ansible -->
-* Download and install VirtualBox for Ubuntu/Debian from https://www.virtualbox.org/wiki/Downloads/. Download the VirtualBox *.deb* package for Ubuntu 20.04 if you would like to follow a similar environment as in this tutorial. For the purposes of this tutorial, the host machine is running Ubuntu 24.04 LTS, while the VM that will be created and managed will be Ubuntu 20.04. The reason for the later is because that is latest distribution available from Vagrant.
+* Download and install VirtualBox for Ubuntu/Debian from https://www.virtualbox.org/wiki/Downloads/. Download the VirtualBox *.deb* package for Ubuntu 20.04 if you would like to follow a similar environment as in this tutorial. For the purposes of this tutorial, the host machine is running Ubuntu 24.04 LTS.
   ```bash
     #!/bin/bash
     sudo apt update
     sudo apt install -y build-essential dkms linux-headers-$(uname -r)
-    sudo apt install virtualbox-7.1 # sudo apt remove virtualbox-7.1
+    sudo apt install virtualbox-7.1 # TO ROMOVE: sudo apt remove virtualbox-7.1
     sudo apt --fix-broken install
     sudo dpkg -i ~/Downloads/virtualbox-7.1_7.1.12-169651~Ubuntu~focal_amd64.deb # TO ROMOVE: sudo apt remove virtualbox
-    sudo apt install virtualbox-guest-additions-iso # TO REMOVE: sudo apt remove virtualbox-guest-additions-iso # If mismatch with Vagrant's expected version, 'vagrant up' won't work.
-    vagrant plugin install vagrant-vbguest # On your host machine, install the vagrant-vbguest plugin
+    sudo apt install virtualbox-guest-additions-iso
+    vagrant plugin install vagrant-vbguest
   ```
-
+  
+<!-- YOu can consider K8s in Docker (kind) as an alternative: https://kind.sigs.k8s.io/docs/user/quick-start-->
 ## Minikube Installation
 ```bash
-    
+    curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
+    sudo install minikube-linux-amd64 /usr/local/bin/minikube
+    sudo rm minikube-linux-amd64
+    minikube start
+
 ```
+Figure 1 shows a message that is displayed when starting Minikube following a successful installation.
+
+<p align="center">
+  <img src="figures/minikube_install_1.png" style="max-width:100%; height:auto;">
+</p>
+<p align="center"><strong>Figure 1:</strong> Starting Minikube</p>
+
+
+<!--
+<figure>
+<table>
+  <tr>
+    <td>
+      <img src="figures/terraform_apply_3.png"/> <!-- width="400" height="200"/> --> <br>
+    </td>
+    <td>
+      <img src="figures/terraform_apply_4.png"/> <!-- width="400" height="200"/> --> <br>
+    </td>
+  </tr>
+</table>
+<figcaption><strong>Figure 4: </strong> Modifying an existing instance </figcaption>
+</figure>
+-->
 
 # References
 * Kubernetes documentation: https://kubernetes.io/docs/
