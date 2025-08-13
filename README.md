@@ -87,6 +87,8 @@ Figure 1 shows a message that is displayed when starting Minikube following a su
     # View version of installed kubectl
     kubectl version --client
     kubectl version --client --output=yaml
+    rm kubectl # Remove the downloaded kubectl installer
+    rm kubectl.sha256 # Remove the downloaded kubectl checksum
 ```
 Figure 2 displays the results of executing the above kubectl installation commands.
 
