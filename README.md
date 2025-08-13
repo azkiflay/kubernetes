@@ -95,6 +95,11 @@ Figure 2 displays the results of executing the above kubectl installation comman
 </p>
 <p align="center"><strong>Figure 1:</strong> kubectl installation </p>
 
+```bash
+    kubectl get componentstatuses
+    kubectl get nodes
+    kubectl describe nodes minikube
+```
 
 # Tools and Terminology
 * **Pod**: a number of containers that have the same Linux *namespace*, *cgroups*, *storage* and *network* resources.
