@@ -1,10 +1,11 @@
 **Contents**
 - [Introduction](#introduction)
-- [Terminology](#terminology)
 - [Installation](#installation)
   - [Docker Installation](#docker-installation)
   - [VirtualBox Installation on Ubuntu 24.04 LTS](#virtualbox-installation-on-ubuntu-2404-lts)
   - [Minikube Installation](#minikube-installation)
+  - [Kubernetes Client (kubectl) Installation](#kubernetes-client-kubectl-installation)
+- [Tools and Terminology](#tools-and-terminology)
 - [References](#references)
 # Introduction
 Multiple Operating Systems (OSes) are able to run on a single server through virtualization solutions such as VMware, Xen, VirtualBox. Containerization tools (e.g., Docker) took hardware-level virtualization to the next level. Because containers provide OS-level virtualization, making application that run in containers to be self-contained. However, while containers solve problems, including package conflict and dependency, managing several containerized applications is not easy. While containers make it possible to deploy applications easily, managing so many of them created difficult. That's the where the need for container orchestration comes in, to create, deploy and manage thousands of containers. 
@@ -13,8 +14,6 @@ For example, [Docker Swam](https://docs.docker.com/engine/swarm/) is a container
 
 Kubernetes orchestrates the deployment of containerized applications. It is an [open-source](https://github.com/kubernetes/kubernetes) software that has been widely used in cloud-native applications. Although originally developed by Google, Kubernetes is used across cloud service providers. Kubernetes is also referred to as **K8s** where the number 8 represents the number of characters between 'K' and 's' in the full name. K8s is the de facto platform for cloud-based container workloads.
 
-# Terminology
-* **Pod**: a number of containers that have the same Linux *namespace*, *cgroups*, *storage* and *network* resources.
 
 <!-- # Note: EKS is not part of AWS free tier. EKS costs $0.10 per cluster per hour. So, resorting to **minikube** local Kubernetes with one controller node. Advanced concepts can be tried later on EKS for a fixed hour and with a clear execution plan, having mastered K8s skills on Minikube first.
 # Amazon Elastic Kubernetes Service (EKS)
@@ -67,25 +66,48 @@ Kubernetes orchestrates the deployment of containerized applications. It is an [
     sudo install minikube-linux-amd64 /usr/local/bin/minikube
     sudo rm minikube-linux-amd64
     minikube start
-
 ```
 Figure 1 shows a message that is displayed when starting Minikube following a successful installation.
 
 <p align="center">
-  <img src="figures/minikube_install_1.png" style="max-width:100%; height:auto;">
+  <img src="figures/minikube_install_1.png" style="max-width:50%; height:auto;">
 </p>
 <p align="center"><strong>Figure 1:</strong> Starting Minikube</p>
 
+## Kubernetes Client (kubectl) Installation
+```bash
+    # Download the latest kubectl release
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    # Download the checksum
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+    # Verify the download kubectl against the checksum
+    echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check # If valid, you should get "kubectl: OK". Otherwise, "kubectl: FAILED".
+    # Install kubectl
+    sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    # View version of installed kubectl
+    kubectl version --client
+    kubectl version --client --output=yaml
+```
+Figure 2 displays the results of executing the above kubectl installation commands.
 
+<p align="center">
+  <img src="figures/minikube_install_1.png" style="max-width:50%; height:auto;">
+</p>
+<p align="center"><strong>Figure 1:</strong> kubectl installation </p>
+
+
+# Tools and Terminology
+* **Pod**: a number of containers that have the same Linux *namespace*, *cgroups*, *storage* and *network* resources.
+* [**kubectl**](https://kubernetes.io/docs/tasks/tools/): is a command line tool for managing Kubernetes objects (e.g., Pods, Services, ReplicaSets)
 <!--
 <figure>
 <table>
   <tr>
     <td>
-      <img src="figures/terraform_apply_3.png"/> <!-- width="400" height="200"/> --> <br>
+      <img src="figures/terraform_apply_3.png style="max-width:100%; height:auto;">
     </td>
     <td>
-      <img src="figures/terraform_apply_4.png"/> <!-- width="400" height="200"/> --> <br>
+      <img src="figures/terraform_apply_4.png style="max-width:100%; height:auto;">
     </td>
   </tr>
 </table>
