@@ -91,7 +91,7 @@ Figure 1 shows a message that is displayed when starting Minikube following a su
 Figure 2 displays the results of executing the above kubectl installation commands.
 
 <p align="center">
-  <img src="figures/minikube_install_1.png" style="max-width:50%; height:auto;">
+  <img src="figures/kubectl_install_1.png" style="max-width:50%; height:auto;">
 </p>
 <p align="center"><strong>Figure 1:</strong> kubectl installation </p>
 
