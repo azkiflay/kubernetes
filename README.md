@@ -1,5 +1,6 @@
 **Contents**
 - [Introduction](#introduction)
+- [Components of Kubernetes](#components-of-kubernetes)
 - [Features of Kubernetes](#features-of-kubernetes)
 - [Kubernetes Derivatives](#kubernetes-derivatives)
 - [Installation](#installation)
@@ -17,6 +18,24 @@ For example, [Docker Swam](https://docs.docker.com/engine/swarm/) is a container
 
 Kubernetes automates the deployment and management of containerized applications. It is an [open-source](https://github.com/kubernetes/kubernetes) software that has been widely used in cloud-native applications. Although originally developed by Google, Kubernetes is used across cloud service providers. Kubernetes is also referred to as **K8s** where the number 8 represents the number of characters between 'K' and 's' in the full name. K8s, pronounced as "*Kates*", is the de facto platform for cloud-based container workloads.
 
+# Components of Kubernetes
+- K8s is an OS for a cluster of computers.
+- K8s provides the following OS-like services to applications:
+  - service discovery: finding and accessing other applications' services
+  - load balancing: sharing load among instances of the application.
+  - self-healing: K8s restarts failed application copies
+  - leader election: K8s decides which application copy is active at a given moment.
+  - horizontal scaling: creating new containerized copies of the application.
+- Computers in a K8s cluster belong to either **control plane** or **data plane**. The control plane consists of master nodes that control the cluster. For production, at least **three** master nodes to achieve high availability. Data plane is composed of computers, known as worker nodes, where actual applications are deployed. The number of nodes in the data plane can vary depending on the use case, but the size of the applications deployed through the K8s API should the worker nodes. For the user, K8s makes all worker nodes a single deployment surface. To manage the deployed application on them, worker nodes also run K8s components, which communicate with the K8s master nodes.
+- **Control plane**:
+  - **Scheduler**: allocates worker nodes the application instances each has to run.
+  - **Controllers**: Create objects based on configuration defined by users.
+  - **K8s API Server**: provides access to the cluster using RESTful API.
+  - **etcd**: *persistent* data store for the API server, which has exclusive access to *etcd*. Although the API server is stateless, *etcd* persists objects created by the former.
+- **Data plane**: 
+
+
+
 # Features of Kubernetes
 - **Abstraction of Infrastructure**: Users and application do not have to worry about specifics of hardware and network, as those are managed by K8s.
 - **Standardized Deployment**: K8s enables application deployment across various cloud and on-premises environments using the same configuration file. Moreover, most cloud providers have adopted K8s, making it easy for users to deploy their application across hybrid-cloud infrastructure. Due to the wide adoption of K8s, users need not worry about compatibility or vendor lock-in. Because K8s APIs work across cloud service providers. Therefore, users do not necessarily have to deploy and manage their applications using proprietary APIs. Instead, they can use K8s APIs, which can transfer easily across major cloud providers such as Google Cloud, IBM Cloud, Microsoft Azure, and Amazon AWS.
@@ -24,7 +43,7 @@ Kubernetes automates the deployment and management of containerized applications
 - **Application Management**: Once and application is deployed on it, K8s takes over its management without any manual involvement from users.
 - **Application Scalability**: Due to its use of declarative configuration and immutable containers, K8s can easily scale up and down resources for applications deployed on it.
 - **Microservice Management**: K8s automates the communication between microservices that are deployed across the infrastructure. 
-- **Support for Devops**: As the infrastructure are abstracted by K8s, development and operations teams collaborate more easily.
+- **Support for Devops**: As the infrastructure are abstracted by K8s, development and operations teams collaborate more easily. Moreover, K8s enables deployment of application by developers, minimizing their reliance on system administrators.
   
 # Kubernetes Derivatives
 Since K8s is an open-source system, commercial Kubernetes products have been derived from it, including [**Red Hat OpenShift**](https://www.redhat.com/en/technologies/cloud-computing/openshift) and [**Rancher**](https://www.rancher.com/).
