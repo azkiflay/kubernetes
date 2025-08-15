@@ -1,5 +1,7 @@
 **Contents**
 - [Introduction](#introduction)
+- [Features of Kubernetes](#features-of-kubernetes)
+- [Kubernetes Derivatives](#kubernetes-derivatives)
 - [Installation](#installation)
   - [Docker Installation](#docker-installation)
   - [VirtualBox Installation on Ubuntu 24.04 LTS](#virtualbox-installation-on-ubuntu-2404-lts)
@@ -13,8 +15,19 @@ Multiple Operating Systems (OSes) are able to run on a single server through vir
 
 For example, [Docker Swam](https://docs.docker.com/engine/swarm/) is a container orchestration platform for Docker containers. Notably, [Kubernetes](https://kubernetes.io/) is one of the most widely used container orchestration platforms. Generally, there two planes in controller orchestration: **control plan** and **data plane**. An orchestrator, e.g., K8s, sits at the *control plane*, while containers, referred to as **worker nodes**, form the *data plane*. While containerized applications are actually run on the worker nodes, the controller administers them. 
 
-Kubernetes orchestrates the deployment of containerized applications. It is an [open-source](https://github.com/kubernetes/kubernetes) software that has been widely used in cloud-native applications. Although originally developed by Google, Kubernetes is used across cloud service providers. Kubernetes is also referred to as **K8s** where the number 8 represents the number of characters between 'K' and 's' in the full name. K8s is the de facto platform for cloud-based container workloads.
+Kubernetes automates the deployment and management of containerized applications. It is an [open-source](https://github.com/kubernetes/kubernetes) software that has been widely used in cloud-native applications. Although originally developed by Google, Kubernetes is used across cloud service providers. Kubernetes is also referred to as **K8s** where the number 8 represents the number of characters between 'K' and 's' in the full name. K8s, pronounced as "*Kates*", is the de facto platform for cloud-based container workloads.
 
+# Features of Kubernetes
+- Abstraction of Infrastructure: Users and application do not have to worry about specifics of hardware and network, as those are managed by K8s.
+- Standardized Deployment: K8s enables application deployment across various cloud and on-premises environments using the same configuration file. Moreover, most cloud providers have adopted K8s, making it easy for users to deploy their application across hybrid-cloud infrastructure. Due to the wide adoption of K8s, users need not worry about compatibility or vendor lock-in. Because K8s APIs work across cloud service providers. Therefore, users do not necessarily have to deploy and manage their applications using proprietary APIs. Instead, they can use K8s APIs, which can transfer easily across major cloud providers such as Google Cloud, IBM Cloud, Microsoft Azure, and Amazon AWS.
+- Declarative Deployment: K8s utilizes declarative model to create and monitor the health status of application components. When configuration of the deployed components is changed, K8s automatically achieves the desired state according to the new declaration. This includes changes made on purpose or when some component fails. In the latter, since K8s continuously takes actions so that the configuration of the desired state matches the actual state. If not, K8s takes necessary actions to remedy any failing or missing component. Consequently, K8s is a self-healing online system.
+- Application Management: Once and application is deployed on it, K8s takes over its management without any manual involvement from users.
+- Application Scalability: Due to its use of declarative configuration and immutable containers, K8s can easily scale up and down resources for applications deployed on it.
+- Microservice Management: K8s automates the communication between microservices that are deployed across the infrastructure. 
+- Enables Devops paradigm: As the infrastructure are abstracted by K8s, development and operations teams collaborate more easily.
+- 
+# Kubernetes Derivatives
+Since K8s is an open-source system, commercial Kubernetes products have been derived from it, including [**Red Hat OpenShift**](https://www.redhat.com/en/technologies/cloud-computing/openshift) and [**Rancher**](https://www.rancher.com/).
 
 <!-- # Note: EKS is not part of AWS free tier. EKS costs $0.10 per cluster per hour. So, resorting to **minikube** local Kubernetes with one controller node. Advanced concepts can be tried later on EKS for a fixed hour and with a clear execution plan, having mastered K8s skills on Minikube first.
 # Amazon Elastic Kubernetes Service (EKS)
@@ -135,8 +148,12 @@ As can be seen in Figure 3, after the **helm** package manager finishes installi
 
 
 # Tools and Terminology
+* **Namespace**: an isolation and access control mechanism.
 * **Pod**: a number of containers that have the same Linux *namespace*, *cgroups*, *storage* and *network* resources.
+* **Service**:
+* **Ingress**: A fronted exposed that can be accessed outside a K8s cluster.
 * [**kubectl**](https://kubernetes.io/docs/tasks/tools/): is a command line tool for managing Kubernetes objects (e.g., Pods, Services, ReplicaSets)
+* 
 <!--
 <figure>
 <table>
@@ -156,4 +173,5 @@ As can be seen in Figure 3, after the **helm** package manager finishes installi
 # References
 * Kubernetes documentation: https://kubernetes.io/docs/
 * Kubernetes: Up and Running, 3rd Edition, by Brendan Burns, Joe Beda, Kelsey Hightower, and Lachlan Evenson (O’Reilly), 2022
+* Kubernetes in Action, 2nd Edition, by Marko Luksa, Manning, 2023
 * 
