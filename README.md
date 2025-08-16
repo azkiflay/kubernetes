@@ -1,8 +1,10 @@
 **Contents**
 - [Introduction](#introduction)
 - [Components of Kubernetes](#components-of-kubernetes)
+- [Application Deployment in Kubernetes](#application-deployment-in-kubernetes)
 - [Features of Kubernetes](#features-of-kubernetes)
 - [Kubernetes Derivatives](#kubernetes-derivatives)
+- [Containers](#containers)
 - [Installation](#installation)
   - [Docker Installation](#docker-installation)
   - [VirtualBox Installation on Ubuntu 24.04 LTS](#virtualbox-installation-on-ubuntu-2404-lts)
@@ -14,26 +16,40 @@
 # Introduction
 Multiple Operating Systems (OSes) are able to run on a single server through virtualization solutions such as VMware, Xen, VirtualBox. Containerization tools (e.g., Docker) took hardware-level virtualization to the next level. Because containers provide OS-level virtualization, making application that run in containers to be self-contained. However, while containers solve problems, including package conflict and dependency, managing several containerized applications is not easy. While containers make it possible to deploy applications easily, managing so many of them created difficult. That's the where the need for container orchestration comes in, to create, deploy and manage thousands of containers. 
 
-For example, [Docker Swam](https://docs.docker.com/engine/swarm/) is a container orchestration platform for Docker containers. Notably, [Kubernetes](https://kubernetes.io/) is one of the most widely used container orchestration platforms. Generally, there two planes in controller orchestration: **control plan** and **data plane**. An orchestrator, e.g., K8s, sits at the *control plane*, while containers, referred to as **worker nodes**, form the *data plane*. While containerized applications are actually run on the worker nodes, the controller administers them. 
+For example, [Docker Swam](https://docs.docker.com/engine/swarm/) is a container orchestration platform for Docker containers. Notably, [Kubernetes](https://kubernetes.io/) is one of the most widely used container orchestration platforms. Generally, there two planes in controller orchestration: **control plan** and **worker plane**. An orchestrator, e.g., K8s, sits at the *control plane*, while containers, referred to as **worker nodes**, form the *worker plane*. While containerized applications are actually run on the worker nodes, the controller administers them. 
 
 Kubernetes automates the deployment and management of containerized applications. It is an [open-source](https://github.com/kubernetes/kubernetes) software that has been widely used in cloud-native applications. Although originally developed by Google, Kubernetes is used across cloud service providers. Kubernetes is also referred to as **K8s** where the number 8 represents the number of characters between 'K' and 's' in the full name. K8s, pronounced as "*Kates*", is the de facto platform for cloud-based container workloads.
 
 # Components of Kubernetes
-- K8s is an OS for a cluster of computers.
-- K8s provides the following OS-like services to applications:
-  - service discovery: finding and accessing other applications' services
-  - load balancing: sharing load among instances of the application.
-  - self-healing: K8s restarts failed application copies
-  - leader election: K8s decides which application copy is active at a given moment.
-  - horizontal scaling: creating new containerized copies of the application.
-- Computers in a K8s cluster belong to either **control plane** or **data plane**. The control plane consists of master nodes that control the cluster. For production, at least **three** master nodes to achieve high availability. Data plane is composed of computers, known as worker nodes, where actual applications are deployed. The number of nodes in the data plane can vary depending on the use case, but the size of the applications deployed through the K8s API should the worker nodes. For the user, K8s makes all worker nodes a single deployment surface. To manage the deployed application on them, worker nodes also run K8s components, which communicate with the K8s master nodes.
-- **Control plane**:
-  - **Scheduler**: allocates worker nodes the application instances each has to run.
+<!-- K8s is an OS for a cluster of computers.-->
+- K8s provides the following services to applications:
+  - **service discovery**: finding and accessing other applications' services
+  - **load balancing**: sharing load among instances of the application.
+  - **self-healing**: K8s restarts failed application copies
+  - **leader election**: K8s decides which application copy is active at a given moment.
+  - **horizontal scaling**: creating new containerized copies of the application.
+- Computers in a K8s cluster belong to either **control plane** or **worker plane**. The control plane consists of master nodes that control the cluster. For production, at least **three** master nodes to achieve high availability. Worker plane is composed of computers, known as worker nodes, where actual applications are deployed. The number of nodes in the worker plane can vary depending on the use case, but the size of the applications deployed through the K8s API should the worker nodes. For the user, K8s makes all worker nodes a single deployment surface. To manage the deployed application on them, worker nodes also run K8s components, which communicate with the K8s master nodes.
+- **Control Plane**:
+  - **Scheduler**: assigns worker nodes the application instances each has to run.
   - **Controllers**: Create objects based on configuration defined by users.
   - **K8s API Server**: provides access to the cluster using RESTful API.
   - **etcd**: *persistent* data store for the API server, which has exclusive access to *etcd*. Although the API server is stateless, *etcd* persists objects created by the former.
-- **Data plane**: 
+- **Worker Plane**: 
+  - **Kubelet**: It is an agent that communicates with the K8s API server. Kubelet manages worker nodes and containers that run on them.
+  - **Container Runtime**: Docker or other K8s-compatible container. It runs applications according to instructions it receives from the Kubelet. It also sends status reports to Kublet.
+  - **Kube Proxy**: Network traffic load balancer for deployed applications. Kube Proxy connects the Worker Plane to the API Server in the Control Plane.
+  - Each worker has Kublet, Kube Proxy, Container Runtime, and optionally **Logging Agent**, **Network Plugin**, and **DNS Server**.
 
+# Application Deployment in Kubernetes
+- An application is deployed in K8s by creating various objects defined using **manifest files** in Yet Another Markup Language (**YAML**) or JavaScript Object Notation (**JSON**).
+- User submits (e.g., using *kubectl**) an application manifest file to K8s API.
+- K8s API Server saves the objects defined int he manifest file to **etcd** for persistence.
+- The controller creates the objects in the manifest. It can create more than one objects if replicas are specified.
+- The scheduler allocates nodes to application instances.
+- At the worker node, the Kublet detects the Scheduler assigned an instance to the node. The, the Kublet instructs the container runtime to run the application.
+- The Kube Proxy creates a load balancer for the application instances. It assigns a single IP address to expose the applications for external access.
+- Kublet and Kublet Pxoy are types of controllers at the worker node level.
+- The applications are monitored by the Kublets and the Controllers, maintaining the desired state as defined in the manifest file.
 
 
 # Features of Kubernetes
@@ -48,6 +64,9 @@ Kubernetes automates the deployment and management of containerized applications
 # Kubernetes Derivatives
 Since K8s is an open-source system, commercial Kubernetes products have been derived from it, including [**Red Hat OpenShift**](https://www.redhat.com/en/technologies/cloud-computing/openshift) and [**Rancher**](https://www.rancher.com/).
 
+# Containers
+
+
 <!-- # Note: EKS is not part of AWS free tier. EKS costs $0.10 per cluster per hour. So, resorting to **minikube** local Kubernetes with one controller node. Advanced concepts can be tried later on EKS for a fixed hour and with a clear execution plan, having mastered K8s skills on Minikube first.
 # Amazon Elastic Kubernetes Service (EKS)
 - On AWS. EKS is used to deploy and manage Kubernetes clusters. When using EKS, users spend more time on their specific use cases rather than on installing and maintaining Kubernetes.
@@ -60,6 +79,7 @@ Since K8s is an open-source system, commercial Kubernetes products have been der
 -->
 
 # Installation
+K8s can be installed in on-premises environment, cloud service providers, or in a hybrid environment.
 ## Docker Installation
 ```bash
     # Add Docker's official GPG key
