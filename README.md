@@ -3,15 +3,9 @@
 - [Components of Kubernetes](#components-of-kubernetes)
 - [Application Deployment in Kubernetes](#application-deployment-in-kubernetes)
 - [Features of Kubernetes](#features-of-kubernetes)
-- [Kubernetes Derivatives](#kubernetes-derivatives)
-- [Containers](#containers)
-- [Installation](#installation)
-  - [Docker Installation](#docker-installation)
-  - [VirtualBox Installation on Ubuntu 24.04 LTS](#virtualbox-installation-on-ubuntu-2404-lts)
-  - [Minikube Installation](#minikube-installation)
-  - [Kubernetes Client (kubectl) Installation](#kubernetes-client-kubectl-installation)
-  - [Installing K8s Dashboard](#installing-k8s-dashboard)
+- [Manged Kubernetes Services](#manged-kubernetes-services)
 - [Tools and Terminology](#tools-and-terminology)
+- [Amazon Elastic Kubernetes Service (EKS)](#amazon-elastic-kubernetes-service-eks)
 - [References](#references)
 # Introduction
 Multiple Operating Systems (OSes) are able to run on a single server through virtualization solutions such as VMware, Xen, VirtualBox. Containerization tools (e.g., Docker) took hardware-level virtualization to the next level. Because containers provide OS-level virtualization, making application that run in containers to be self-contained. However, while containers solve problems, including package conflict and dependency, managing several containerized applications is not easy. While containers make it possible to deploy applications easily, managing so many of them created difficult. That's the where the need for container orchestration comes in, to create, deploy and manage thousands of containers. 
@@ -61,13 +55,19 @@ Kubernetes automates the deployment and management of containerized applications
 - **Microservice Management**: K8s automates the communication between microservices that are deployed across the infrastructure. 
 - **Support for Devops**: As the infrastructure are abstracted by K8s, development and operations teams collaborate more easily. Moreover, K8s enables deployment of application by developers, minimizing their reliance on system administrators.
   
-# Kubernetes Derivatives
-Since K8s is an open-source system, commercial Kubernetes products have been derived from it, including [**Red Hat OpenShift**](https://www.redhat.com/en/technologies/cloud-computing/openshift) and [**Rancher**](https://www.rancher.com/).
+# Manged Kubernetes Services
+Since K8s is an open-source system, there are managed service providers that are derived from K8s, including [**Red Hat OpenShift**](https://www.redhat.com/en/technologies/cloud-computing/openshift) and [**Rancher**](https://www.rancher.com/), [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine?hl=en), [Azure Kubernetes Service (AKS)](https://azure.microsoft.com/en-us/products/kubernetes-service), and [Amazon Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/).
 
-# Containers
+# Tools and Terminology
+* **Namespace**: an isolation and access control mechanism.
+* **Pod**: a number of containers that have the same Linux *namespace*, *cgroups*, *storage* and *network* resources.
+* **Service**:
+* **Ingress**: A fronted exposed that can be accessed outside a K8s cluster.
+* [**kubectl**](https://kubernetes.io/docs/tasks/tools/): is a command line tool for managing Kubernetes objects (e.g., Pods, Services, ReplicaSets)
 
 
-<!-- # Note: EKS is not part of AWS free tier. EKS costs $0.10 per cluster per hour. So, resorting to **minikube** local Kubernetes with one controller node. Advanced concepts can be tried later on EKS for a fixed hour and with a clear execution plan, having mastered K8s skills on Minikube first.
+<!-- # Note: EKS is not part of AWS free tier. EKS costs $0.10 per cluster per hour. So, resorting to **minikube** local Kubernetes with one controller node. Advanced concepts can be tried later on EKS for a fixed hour and with a clear execution plan, having mastered K8s skills on Minikube first. -->
+
 # Amazon Elastic Kubernetes Service (EKS)
 - On AWS. EKS is used to deploy and manage Kubernetes clusters. When using EKS, users spend more time on their specific use cases rather than on installing and maintaining Kubernetes.
 - EKS is a managed service tha is used to run containerized applications. It reduces complexities of *networking*, *security*, *storage*, *scaling*, *load balancing*, and *observability*, and integration with other AWS services.
@@ -76,8 +76,35 @@ Since K8s is an open-source system, commercial Kubernetes products have been der
 - Pre-requisite: AWS account, familiarity with Linux, Python, Terraform, YAML
 - Tools and Interfaces: AWS CLI, eksctl, AWS CDK, Terraform, AWS Console, Helm
 - EKS AMI images
+
+
+
+
+<!--
+<figure>
+<table>
+  <tr>
+    <td>
+      <img src="figures/terraform_apply_3.png style="max-width:100%; height:auto;">
+    </td>
+    <td>
+      <img src="figures/terraform_apply_4.png style="max-width:100%; height:auto;">
+    </td>
+  </tr>
+</table>
+<figcaption><strong>Figure 4: </strong> Modifying an existing instance </figcaption>
+</figure>
 -->
 
+# References
+* Kubernetes documentation: https://kubernetes.io/docs/
+* Kubernetes: Up and Running, 3rd Edition, by Brendan Burns, Joe Beda, Kelsey Hightower, and Lachlan Evenson (O’Reilly), 2022
+* Kubernetes in Action, 2nd Edition, by Marko Luksa, Manning, 2023
+* 
+
+
+<!--   ####################   TODO: Reuse or remove the content below    ########################   -->
+<!--
 # Installation
 K8s can be installed in on-premises environment, cloud service providers, or in a hybrid environment.
 ## Docker Installation
@@ -97,10 +124,15 @@ K8s can be installed in on-premises environment, cloud service providers, or in 
     # Verify that the Docker Engine installation
     sudo docker run hello-world
 ```
+-->
 
+
+
+<!-- 
 ## VirtualBox Installation on Ubuntu 24.04 LTS
-<!-- TODO: Address redundancy by putting a link to github.com/azkiflay/ansible -->
-* Download and install VirtualBox for Ubuntu/Debian from https://www.virtualbox.org/wiki/Downloads/. Download the VirtualBox *.deb* package for Ubuntu 20.04 if you would like to follow a similar environment as in this tutorial. For the purposes of this tutorial, the host machine is running Ubuntu 24.04 LTS.
+TODO: Address redundancy by putting a link to github.com/azkiflay/ansible -->
+
+<!-- * Download and install VirtualBox for Ubuntu/Debian from https://www.virtualbox.org/wiki/Downloads/. Download the VirtualBox *.deb* package for Ubuntu 20.04 if you would like to follow a similar environment as in this tutorial. For the purposes of this tutorial, the host machine is running Ubuntu 24.04 LTS.
   ```bash
     #!/bin/bash
     sudo apt update
@@ -111,8 +143,11 @@ K8s can be installed in on-premises environment, cloud service providers, or in 
     sudo apt install virtualbox-guest-additions-iso
     vagrant plugin install vagrant-vbguest
   ```
-  
-<!-- YOu can consider K8s in Docker (kind) as an alternative: https://kind.sigs.k8s.io/docs/user/quick-start-->
+-->
+
+
+<!-- You can consider K8s in Docker (kind) as an alternative: https://kind.sigs.k8s.io/docs/user/quick-start-->
+<!--
 ## Minikube Installation
 ```bash
     curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
@@ -184,33 +219,4 @@ As can be seen in Figure 3, after the **helm** package manager finishes installi
   <img src="figures/dashboard_install_1.png" style="max-width:50%; height:auto;">
 </p>
 <p align="center"><strong>Figure 1:</strong> Dashboard installation </p>
-
-
-# Tools and Terminology
-* **Namespace**: an isolation and access control mechanism.
-* **Pod**: a number of containers that have the same Linux *namespace*, *cgroups*, *storage* and *network* resources.
-* **Service**:
-* **Ingress**: A fronted exposed that can be accessed outside a K8s cluster.
-* [**kubectl**](https://kubernetes.io/docs/tasks/tools/): is a command line tool for managing Kubernetes objects (e.g., Pods, Services, ReplicaSets)
-* 
-<!--
-<figure>
-<table>
-  <tr>
-    <td>
-      <img src="figures/terraform_apply_3.png style="max-width:100%; height:auto;">
-    </td>
-    <td>
-      <img src="figures/terraform_apply_4.png style="max-width:100%; height:auto;">
-    </td>
-  </tr>
-</table>
-<figcaption><strong>Figure 4: </strong> Modifying an existing instance </figcaption>
-</figure>
 -->
-
-# References
-* Kubernetes documentation: https://kubernetes.io/docs/
-* Kubernetes: Up and Running, 3rd Edition, by Brendan Burns, Joe Beda, Kelsey Hightower, and Lachlan Evenson (O’Reilly), 2022
-* Kubernetes in Action, 2nd Edition, by Marko Luksa, Manning, 2023
-* 
