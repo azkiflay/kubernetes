@@ -3,8 +3,8 @@
 - [Components of Kubernetes](#components-of-kubernetes)
 - [Application Deployment in Kubernetes](#application-deployment-in-kubernetes)
 - [Features of Kubernetes](#features-of-kubernetes)
-- [Manged Kubernetes Services](#manged-kubernetes-services)
 - [Tools and Terminology](#tools-and-terminology)
+- [Manged Kubernetes Services](#manged-kubernetes-services)
 - [Amazon Elastic Kubernetes Service (EKS)](#amazon-elastic-kubernetes-service-eks)
 - [References](#references)
 # Introduction
@@ -54,9 +54,6 @@ Kubernetes automates the deployment and management of containerized applications
 - **Application Scalability**: Due to its use of declarative configuration and immutable containers, K8s can easily scale up and down resources for applications deployed on it.
 - **Microservice Management**: K8s automates the communication between microservices that are deployed across the infrastructure. 
 - **Support for Devops**: As the infrastructure are abstracted by K8s, development and operations teams collaborate more easily. Moreover, K8s enables deployment of application by developers, minimizing their reliance on system administrators.
-  
-# Manged Kubernetes Services
-Since K8s is an open-source system, there are managed service providers that are derived from K8s, including [**Red Hat OpenShift**](https://www.redhat.com/en/technologies/cloud-computing/openshift) and [**Rancher**](https://www.rancher.com/), [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine?hl=en), [Azure Kubernetes Service (AKS)](https://azure.microsoft.com/en-us/products/kubernetes-service), and [Amazon Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/).
 
 # Tools and Terminology
 * **Namespace**: an isolation and access control mechanism.
@@ -64,11 +61,12 @@ Since K8s is an open-source system, there are managed service providers that are
 * **Service**:
 * **Ingress**: A fronted exposed that can be accessed outside a K8s cluster.
 * [**kubectl**](https://kubernetes.io/docs/tasks/tools/): is a command line tool for managing Kubernetes objects (e.g., Pods, Services, ReplicaSets)
-
-
-<!-- # Note: EKS is not part of AWS free tier. EKS costs $0.10 per cluster per hour. So, resorting to **minikube** local Kubernetes with one controller node. Advanced concepts can be tried later on EKS for a fixed hour and with a clear execution plan, having mastered K8s skills on Minikube first. -->
+* 
+# Manged Kubernetes Services
+Kubernetes is an open-source system, giving rise to a number of service providers. While it is possible to deploy and run all Kubernetes components from scratch in ones own infratructure, it is usually better to leverage existing Kubernetes cloud service provisions. Some of the dominant managed kubernetes service providers include [**Red Hat OpenShift**](https://www.redhat.com/en/technologies/cloud-computing/openshift), [**Rancher**](https://www.rancher.com/), [**Google Kubernetes Engine (GKE)**](https://cloud.google.com/kubernetes-engine?hl=en), [**Azure Kubernetes Service (AKS)**](https://azure.microsoft.com/en-us/products/kubernetes-service), and [**Amazon Elastic Kubernetes Service (EKS)**](https://aws.amazon.com/eks/).
 
 # Amazon Elastic Kubernetes Service (EKS)
+<!-- # Note: EKS is not part of AWS free tier. EKS costs $0.10 per cluster per hour. So, resorting to **minikube** local Kubernetes with one controller node. Advanced concepts can be tried later on EKS for a fixed hour and with a clear execution plan, having mastered K8s skills on Minikube first. -->
 - On AWS. EKS is used to deploy and manage Kubernetes clusters. When using EKS, users spend more time on their specific use cases rather than on installing and maintaining Kubernetes.
 - EKS is a managed service tha is used to run containerized applications. It reduces complexities of *networking*, *security*, *storage*, *scaling*, *load balancing*, and *observability*, and integration with other AWS services.
 - In EKS, Amazon provides the control plane of the K8s, and the user attaches worker nodes to it.
@@ -76,7 +74,6 @@ Since K8s is an open-source system, there are managed service providers that are
 - Pre-requisite: AWS account, familiarity with Linux, Python, Terraform, YAML
 - Tools and Interfaces: AWS CLI, eksctl, AWS CDK, Terraform, AWS Console, Helm
 - EKS AMI images
-
 
 
 
