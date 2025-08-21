@@ -6,6 +6,8 @@
 - [Tools and Terminology](#tools-and-terminology)
 - [Manged Kubernetes Services](#manged-kubernetes-services)
 - [Amazon Elastic Kubernetes Service (EKS)](#amazon-elastic-kubernetes-service-eks)
+- [Creating EKS Cluster](#creating-eks-cluster)
+  - [EKS with Terraform](#eks-with-terraform)
 - [References](#references)
 # Introduction
 Multiple Operating Systems (OSes) are able to run on a single server through virtualization solutions such as VMware, Xen, VirtualBox. Containerization tools (e.g., Docker) took hardware-level virtualization to the next level. Because containers provide OS-level virtualization, making application that run in containers to be self-contained. However, while containers solve problems, including package conflict and dependency, managing several containerized applications is not easy. While containers make it possible to deploy applications easily, managing so many of them created difficult. That's the where the need for container orchestration comes in, to create, deploy and manage thousands of containers. 
@@ -63,19 +65,145 @@ Kubernetes automates the deployment and management of containerized applications
 * [**kubectl**](https://kubernetes.io/docs/tasks/tools/): is a command line tool for managing Kubernetes objects (e.g., Pods, Services, ReplicaSets)
 * 
 # Manged Kubernetes Services
-Kubernetes is an open-source system, giving rise to a number of service providers. While it is possible to deploy and run all Kubernetes components from scratch in ones own infratructure, it is usually better to leverage existing Kubernetes cloud service provisions. Some of the dominant managed kubernetes service providers include [**Red Hat OpenShift**](https://www.redhat.com/en/technologies/cloud-computing/openshift), [**Rancher**](https://www.rancher.com/), [**Google Kubernetes Engine (GKE)**](https://cloud.google.com/kubernetes-engine?hl=en), [**Azure Kubernetes Service (AKS)**](https://azure.microsoft.com/en-us/products/kubernetes-service), and [**Amazon Elastic Kubernetes Service (EKS)**](https://aws.amazon.com/eks/).
+Kubernetes is an open-source system, giving rise to a number of service providers. While it is possible to deploy and run all Kubernetes components from scratch in ones own infratructure, it is usually better to leverage existing Kubernetes cloud service provisions. Some of the dominant managed kubernetes service providers include [**Red Hat OpenShift**](https://www.redhat.com/en/technologies/cloud-computing/openshift), [**Rancher**](https://www.rancher.com/), [**Google Kubernetes Engine (GKE)**](https://cloud.google.com/kubernetes-engine?hl=en), [**Azure Kubernetes Service (AKS)**](https://azure.microsoft.com/en-us/products/kubernetes-service), and [**Amazon Elastic Kubernetes Service (EKS)**](https://aws.amazon.com/eks/). The focus of this tutorial is on Amazon's **EKS**.
+
+<!--
+## Creating Google Kubernetes Engine (GKE)
+GKE is a managed K8s service provided by Google. Unlike self-managed K8s, GKE provides cluster nodes that are ready for deploying your applications. You can take the following steps to set up your GKE.
+- Create a Google account or use an existing one.
+- Sign up for a trial GKE service [here](https://cloud.google.com/kubernetes-engine?hl=en).
+- Install [**gcloud CLI**](https://cloud.google.com/sdk/docs/install#deb) for your platform.
+  ```bash
+    sudo apt-get update
+    sudo apt-get install apt-transport-https ca-certificates gnupg curl # apt-transport-https, curl
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg # Import the Google Cloud public key
+    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list # Add the gcloud CLI distribution URI as a package source
+    sudo apt-get update && sudo apt-get install google-cloud-cli # Update and install the gcloud CLI
+    gcloud init # To authenticate sign in to Google Cloud SDK
+    gcloud components update # To upgrade
+    ```
+- Running **gcloud init** will prompt you to create a new project or use an existing one.
+- To create a Kubernetes cluster on GKE, use **glcoud** as shown below.
+  ```bash
+    gcloud config set compute/zone europe-west2-c # Configure default zone. Check https://cloud.google.com/compute/docs/regions-zones
+  ```
+-->
 
 # Amazon Elastic Kubernetes Service (EKS)
 <!-- # Note: EKS is not part of AWS free tier. EKS costs $0.10 per cluster per hour. So, resorting to **minikube** local Kubernetes with one controller node. Advanced concepts can be tried later on EKS for a fixed hour and with a clear execution plan, having mastered K8s skills on Minikube first. -->
-- On AWS. EKS is used to deploy and manage Kubernetes clusters. When using EKS, users spend more time on their specific use cases rather than on installing and maintaining Kubernetes.
-- EKS is a managed service tha is used to run containerized applications. It reduces complexities of *networking*, *security*, *storage*, *scaling*, *load balancing*, and *observability*, and integration with other AWS services.
-- In EKS, Amazon provides the control plane of the K8s, and the user attaches worker nodes to it.
-- Self-managed Kubernetes cluster is an alternative to EKS on AWS. Of course, there are other similar solutions from other providers as well other than Amazon (e.g., Azure Kubernetes Service, Google Kubernetes Engine).
+
+- EKS is a managed Kubernetes service provided by Amazon. It is usually a better alternative to self-managed K8s cluster. Of course, there are other similar solutions from other providers such as Microsoft, Google, and Red Hat.
+- On Amazon AWS, EKS is used to deploy and manage K8s clusters.
+- Using EKS, you can spend more time on your specific use case rather than on installing and maintaining K8s.
+- EKS is a managed service that is used to run containerized applications. It reduces complexities of *networking*, *security*, *storage*, *scaling*, *load balancing*, and *observability*, and integration with other AWS services.
+- In EKS, Amazon provides the control plane of the K8s, and the user attaches worker nodes to it. Users can use worker nodes from AWS or attach their own self-managed worker nodes.
 - Pre-requisite: AWS account, familiarity with Linux, Python, Terraform, YAML
-- Tools and Interfaces: AWS CLI, eksctl, AWS CDK, Terraform, AWS Console, Helm
+- Tools and Interfaces: AWS CLI, **eksctl**, AWS CDK, Terraform, AWS Console, Helm
 - EKS AMI images
 
 
+# Creating EKS Cluster
+EKS clusters can be created and managed using the AWS Console, AWS CLI, CloudFormation, **eksctl**, or Terraform. Terraform is an Infrastructure as Code (IaC) tool developed by HashiCorp. It is one of the widely used IaC tools to deploy and delete AWS infrastructure including EKS. In comparison to other options, using Terraform for EKS clusters has advantages. Firstly, Terraform provides **unified workflow** management if other AWS infrastructure components are deployed using Terraform. Secondly, Terraform enables **full lifecycle management** by creating, updating and deleting resources easily. Thirdly, Terraform determines resource dependency graphs before creating the EKS cluster.
+
+## EKS with Terraform
+One of the easiest ways to create an EKS cluster is using a [repository](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks) provided by HashiCorp. The Terraform configuration provisions security groups, Virtual Private Cloud (VPC), and an EKS cluster. 
+
+The following demonstrates how EKS clusters can be created using Terraform. WARNING: YOU WILL BE CHARGED WHEN YOU EXECUTE THESE COMMANDS. At the time of writing this, the AWS charges are 0.10 USD per hour per EKS cluster. If you decide to proceed with experimenting at the current rate of price, remember to issue **terrafrom destroy** at the end to ensure you DO NOT LEAVE any EKS clusters running, for which you will be charged.
+  ```bash
+    git clone https://github.com/hashicorp/learn-terraform-provision-eks-cluster
+    cd learn-terraform-provision-eks-cluster/ 
+    terraform init
+    terraform plan
+    terraform apply
+    terraform destroy
+  ```
+
+# References
+* Kubernetes documentation: https://kubernetes.io/docs/
+* Kubernetes: Up and Running, 3rd Edition, by Brendan Burns, Joe Beda, Kelsey Hightower, and Lachlan Evenson (O’Reilly), 2022
+* Kubernetes in Action, 2nd Edition, by Marko Luksa, Manning, 2023
+
+<!--
+# Install and Configuring AWS account for EKS
+* Install AWS CLI as described [here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions).
+* Similarly, configure AWS CLI according to the steps relevant for your [platform](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions). Some of the important commands for doing so are summarized below.
+
+```bash
+    aws configure
+    aws configure set region eu-west-2 --profile edom
+    aws configure get region --profile edom
+    aws configure list
+    aws configure list-profiles
+    export AWS_ACCESS_KEY_ID=<Enter value AWS_ACCESS_KEY_ID>
+    export AWS_SECRET_ACCESS_KEY=<Enter value AWS_SECRET_ACCESS_KEY>
+    aws sts get-caller-identity # Verify the active user
+```
+
+- Create temporary root access on AWS Console as shown in Figure 1 below.
+    <p align="left">
+    <img src="figures/aws_root_access_1.png" style="max-width:50%; height:auto;">
+    </p>
+    <p align="left"><strong>Figure 1:</strong> Create root access credentials </p>
+- Copy access and secret keys from AWS Console and set them as environment variables as shown below.
+  ```bash
+    export AWS_ACCESS_KEY_ID=Enter access key here 
+    export AWS_SECRET_ACCESS_KEY=Enter secret access 
+    export AWS_DEFAULT_REGION=eu-west-2 # Change to your preferred region. Refer https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html
+    aws configure list # Confirm the above configuration
+  ```
+
+- Create EKS administration policy. To do that, customize the following AWS EKS policy document [example](https://docs.aws.amazon.com/eks/latest/userguide/security-iam-id-based-policy-examples.html#policy-create-cluster).
+- The policy document is a JSON file, saved as "azkiflay-ekspolicy.json" in thi case.
+  ```bash
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": "eks:CreateCluster",
+                "Resource": "arn:aws:eks:us-west-2:111122223333:cluster/my-cluster"
+            },
+            {
+                "Effect": "Allow",
+                "Action": "iam:CreateServiceLinkedRole",
+                "Resource": "arn:aws:iam::111122223333:role/aws-service-role/eks.amazonaws.com/AWSServiceRoleForAmazonEKS",
+                "Condition": {
+                    "ForAnyValue:StringEquals": {
+                        "iam:AWSServiceName": "eks"
+                    }
+                }
+            },
+            {
+                "Effect": "Allow",
+                "Action": "iam:PassRole",
+                "Resource": "arn:aws:iam::111122223333:role/cluster-role-name"
+            }
+        ]
+    }
+  ```
+- Create an EKS Admin policy according to the JSON file as follows.
+  ```bash
+    aws iam create-policy --policy-name azkiflayEksPolicy --policy-document file://azkiflayEksPolicy.json
+  ```
+  Figure 2 shows the results of the last command above.
+    <p align="left">
+    <img src="figures/eks_iam_policy_1.png" style="max-width:50%; height:auto;">
+    </p>
+    <p align="left"><strong>Figure 1:</strong> EKS Admin Policy </p>
+
+- Retrieve the policy's ARN as follows.
+    ```bash
+        export EKSARN=$(aws iam list-policies --query 'Policies[?PolicyName=='azkiflayEksPolicy'].{ARN:Arn}' --output text)
+    ``` 
+- Create an EKS Admin group
+    ```bash
+        aws iam create-group --group-name EKSAdmins
+    ```
+- Attach the EKS Admin policy to the EKS Admin group.
+  ```bash
+    aws iam attach-group-policy --policy-arn $EKSARN --group-name EKSAdmins
+  ```
+-->
 
 <!--
 <figure>
@@ -92,12 +220,6 @@ Kubernetes is an open-source system, giving rise to a number of service provider
 <figcaption><strong>Figure 4: </strong> Modifying an existing instance </figcaption>
 </figure>
 -->
-
-# References
-* Kubernetes documentation: https://kubernetes.io/docs/
-* Kubernetes: Up and Running, 3rd Edition, by Brendan Burns, Joe Beda, Kelsey Hightower, and Lachlan Evenson (O’Reilly), 2022
-* Kubernetes in Action, 2nd Edition, by Marko Luksa, Manning, 2023
-* 
 
 
 <!--   ####################   TODO: Reuse or remove the content below    ########################   -->
