@@ -123,14 +123,41 @@ The following demonstrates how EKS clusters can be created using Terraform. </br
     terraform init
     terraform plan
     terraform apply
-    terraform destroy
   ```
-After the EKS is created, it can be managed using **EKS dashboard** or the **kubectl** tool. In the former, note that the EKS dashboard is viewable from the organization's AWS management and delegated administrator account. Moreover, as shown in Figure 2, a request by to AWS to switch to a default region.
-You can only view the EKS Dashboard from your AWS Organization's management account and delegated administrator account. To get started, follow the steps below.
+After the EKS is created, it can be managed using **EKS dashboard** or the **kubectl** tool. In the former, note that the EKS dashboard may be accessible from a specific region, as shown in Figure 2, which requests to switching to the *us-east-1* region.
     <p align="left">
     <img src="figures/eks_admin_dashboard_1.png" style="max-width:50%; height:auto;">
     </p>
-    <p align="left"><strong>Figure 1:</strong> Switching to the default region to access EKS Dashboard </p>
+    <p align="left"><strong>Figure 2:</strong> Switching to the default region to access EKS Dashboard </p>
+
+The EKS dashboard is viewable from the organization's AWS management and delegated administrator accounts. Particularly, specific steps need to be taken to enable and view the EKS dashboard as displayed in Figure 2.
+    <p align="left">
+    <img src="figures/eks_admin_dashboard_2.png" style="max-width:50%; height:auto;">
+    </p>
+    <p align="left"><strong>Figure 1:</strong> Enabling the EKS Dashboard </p>
+* Step 1: Enable Trusted Access
+* Step 2: Assign delegated administrator for the EKS. The account from which you are making the delegation cannot be delegated.
+  - Create the user and enable AWS console access.
+  - Attach policy to the user. For example, **AmazonEKSClusterPolicy**, **AmazonEKSServicePolicy**, and **AmazonEC2ReadOnlyAccess**.
+* Step 3: Login from the delegated account to view the EKS Dashboard.
+
+Figure 3 displays the EKS cluster that was created according to the Terraform IaC code.
+    <p align="left">
+    <img src="figures/eks_cluster_dashboard_1.png" style="max-width:50%; height:auto;">
+    </p>
+    <p align="left"><strong>Figure 3:</strong> EKS Cluster </p>
+
+Various other details of the EKS cluster can be accessed via the dashboard. However, one of the most efficient ways to access and manage a K8s cluster is using the **kubectl**. Figure 4 displays example *kubectl* commands such as **kubectl get nodes**, which display the number of worker nodes that were attached to the EKS cluster.
+    <p align="left">
+    <img src="figures/eks_cluster_kubectl_1.png" style="max-width:50%; height:auto;">
+    </p>
+    <p align="left"><strong>Figure 3:</strong> Kubectl commands </p>
+
+Finally, when there EKS cluster is no longer required, you can delete it using **terraform destroy**. You need to confirm the deletion by typing **yes**. Alternatively, if you are certain about what is to be deleted and you want to proceed with the deletion of the EKS cluster, you can simply issue **terraform destroy -auto-approve**.
+  ```bash
+    terraform destroy
+  ```
+
 
 # References
 * Kubernetes documentation: https://kubernetes.io/docs/
