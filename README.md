@@ -154,7 +154,7 @@ Various other details of the EKS cluster can be accessed via the dashboard. Howe
     <p align="left"><strong>Figure 3:</strong> Kubectl commands </p>
 
 Finally, when there EKS cluster is no longer required, you can delete it using **terraform destroy**. You need to confirm the deletion by typing **yes**. Alternatively, if you are certain about what is to be deleted and you want to proceed with the deletion of the EKS cluster, you can simply issue **terraform destroy -auto-approve**.
-  ```bash
+  ```bash copy
     terraform destroy
   ```
   ```bash
