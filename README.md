@@ -105,6 +105,13 @@ GKE is a managed K8s service provided by Google. Unlike self-managed K8s, GKE pr
 # Creating EKS Cluster
 EKS clusters can be created and managed using the AWS Console, AWS CLI, CloudFormation, **eksctl**, or Terraform. Terraform is an Infrastructure as Code (IaC) tool developed by HashiCorp. It is one of the widely used IaC tools to deploy and delete AWS infrastructure including EKS. In comparison to other options, using Terraform for EKS clusters has advantages. Firstly, Terraform provides **unified workflow** management if other AWS infrastructure components are deployed using Terraform. Secondly, Terraform enables **full lifecycle management** by creating, updating and deleting resources easily. Thirdly, Terraform determines resource dependency graphs before creating the EKS cluster.
 
+To create and manage your EKS clusters, you need to create an IAM user with relevant permissions. One way to do that easily is to create an administrator account on AWS Console as shown in Figure 1 below.
+    <p align="left">
+    <img src="figures/eks_admin_1.png" style="max-width:50%; height:auto;">
+    </p>
+    <p align="left"><strong>Figure 1:</strong> Create IAM user for EKS </p>
+
+
 ## EKS with Terraform
 One of the easiest ways to create an EKS cluster is using a [repository](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks) provided by HashiCorp. The Terraform configuration provisions security groups, Virtual Private Cloud (VPC), and an EKS cluster. 
 
