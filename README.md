@@ -108,7 +108,7 @@ EKS clusters can be created and managed using the AWS Console, AWS CLI, CloudFor
 ## EKS with Terraform
 One of the easiest ways to create an EKS cluster is using a [repository](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks) provided by HashiCorp. The Terraform configuration provisions security groups, Virtual Private Cloud (VPC), and an EKS cluster. 
 
-The following demonstrates how EKS clusters can be created using Terraform. 
+The following demonstrates how EKS clusters can be created using Terraform. </br>
 **WARNING:** YOU WILL BE CHARGED WHEN YOU EXECUTE THESE COMMANDS. At the time of writing this, the AWS charges are 0.10 USD per hour per EKS cluster. If you decide to proceed with experimenting at the current rate of price, remember to issue **terrafrom destroy** at the end to ensure you DO NOT LEAVE any EKS clusters running, for which you will be charged.
   ```bash
     git clone https://github.com/hashicorp/learn-terraform-provision-eks-cluster
