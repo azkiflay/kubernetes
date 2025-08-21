@@ -125,6 +125,12 @@ The following demonstrates how EKS clusters can be created using Terraform. </br
     terraform apply
     terraform destroy
   ```
+After the EKS is created, it can be managed using **EKS dashboard** or the **kubectl** tool. In the former, note that the EKS dashboard is viewable from the organization's AWS management and delegated administrator account. Moreover, as shown in Figure 2, a request by to AWS to switch to a default region.
+You can only view the EKS Dashboard from your AWS Organization's management account and delegated administrator account. To get started, follow the steps below.
+    <p align="left">
+    <img src="figures/eks_admin_dashboard_1.png" style="max-width:50%; height:auto;">
+    </p>
+    <p align="left"><strong>Figure 1:</strong> Switching to the default region to access EKS Dashboard </p>
 
 # References
 * Kubernetes documentation: https://kubernetes.io/docs/
