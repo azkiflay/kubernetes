@@ -142,23 +142,25 @@ The EKS dashboard is viewable from the organization's AWS management and delegat
 * Step 3: Login from the delegated account to view the EKS Dashboard.
 
 Figure 3 displays the EKS cluster that was created according to the Terraform IaC code.
-    <p align="left">
-    <img src="figures/eks_cluster_dashboard_1.png" style="max-width:50%; height:auto;">
-    </p>
-    <p align="left"><strong>Figure 3:</strong> EKS Cluster </p>
+  <p align="left">
+  <img src="figures/eks_cluster_dashboard_1.png" style="max-width:50%; height:auto;">
+  </p>
+  <p align="left"><strong>Figure 3:</strong> EKS Cluster </p>
 
-Various other details of the EKS cluster can be accessed via the dashboard. However, one of the most efficient ways to access and manage a K8s cluster is using the **kubectl**. Figure 4 displays example *kubectl* commands such as **kubectl get nodes**, which displays the number of worker nodes that were attached to the EKS cluster.
+Various other details of the EKS cluster can be accessed via the dashboard. However, one of the most efficient ways to access and manage a K8s cluster is using the **kubectl**. Figure 4 displays example *kubectl* commands such as **kubectl get nodes**, which shows the number of worker nodes that were attached to the EKS cluster.
+<p align="left">
+  <img src="figures/eks_cluster_kubectl_1.png" style="max-width:50%; height:auto;">
+  </p>
+  <p align="left"><strong>Figure 3:</strong> Kubectl commands </p>
+  
   ```bash
-    aws eks --region $(terraform output -raw region) update-kubeconfig \
+  aws eks --region $(terraform output -raw region) update-kubeconfig \ 
     --name $(terraform output -raw cluster_name)
-    kubectl cluster-info
-    kubectl get nodes
-
+  kubectl cluster-info
+  kubectl get nodes
   ```
-    <p align="left">
-    <img src="figures/eks_cluster_kubectl_1.png" style="max-width:50%; height:auto;">
-    </p>
-    <p align="left"><strong>Figure 3:</strong> Kubectl commands </p>
+  
+  
 
 Finally, when there EKS cluster is no longer required, you can delete it using **terraform destroy**. You need to confirm the deletion by typing **yes**. Alternatively, if you are certain about what is to be deleted and you want to proceed with the deletion of the EKS cluster, you can simply issue **terraform destroy -auto-approve**.
   ```bash
