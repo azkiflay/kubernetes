@@ -219,7 +219,7 @@ Various other details of the EKS cluster can be accessed via the dashboard. Howe
 
 Figure 4 displays example *kubectl* commands such as **kubectl get nodes**, which shows the number of worker nodes that were attached to the EKS cluster.
 <p align="left">
-  <img src="figures/eks_cluster_kubectl_1.png" style="max-width:50%; height:auto;">
+  <img src="figures/eks_cluster_kubectl_3.png" style="max-width:50%; height:auto;">
   </p>
   <p align="left"><strong>Figure 4:</strong> Kubectl commands </p>
 
