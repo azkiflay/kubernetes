@@ -6,7 +6,9 @@
 - [Tools and Terminology](#tools-and-terminology)
 - [Manged Kubernetes Services](#manged-kubernetes-services)
 - [Amazon Elastic Kubernetes Service (EKS)](#amazon-elastic-kubernetes-service-eks)
+  - [EKS Architecture](#eks-architecture)
 - [Creating EKS Cluster](#creating-eks-cluster)
+  - [EKS with AWS Console](#eks-with-aws-console)
   - [EKS with Terraform](#eks-with-terraform)
 - [References](#references)
 # Introduction
@@ -101,7 +103,17 @@ GKE is a managed K8s service provided by Google. Unlike self-managed K8s, GKE pr
 - Tools and Interfaces: AWS CLI, **eksctl**, AWS CDK, Terraform, AWS Console, Helm
 - EKS AMI images
 
-
+## EKS Architecture
+While K8s is a container orchestrator, EKS is an orchestrator for K8s clusters. There are two planes in K8s: the control plane and the worker plane. In EKS, AWS manages the K8s control plane, which is composed of K8s and AWS components. These include the **controller manager**, **API server**, **scheduler**, and **etcd** database. In contrast, the worker plane is administered by an EKS user. The worker plane is created within an AWS virtual private cloud (VPC) network. To enable communication between the K8s control and worker planes, EKS utilizes AWS-managed VPC network.
+The control plane includes the following: </br>
+- **API Sever**: provides access gateway for all user and service requests from inside and outside the cluster.
+- **Controller Manager**: maintains the desired state of cluster objects through controllers for nodes, replica, endpoint, and so on.
+- **etcd**: datastore for key-value pairs and other metadata to keep EKS clusters in a desired state.
+- **Scheduler**: assigns workloads to nodes.
+The EKS worker plane includes the following: </br>
+- **VPC**: network infrastructure managed by the user to deploy worker plane resources. Worker nodes inside the VPC run the pods in the cluster.
+- **Cluster Security Group**: virtual firewall to control traffic between the control plane and worker plane.
+  
 # Creating EKS Cluster
 EKS clusters can be created and managed using the AWS Console, AWS CLI, CloudFormation, **eksctl**, or Terraform. Terraform is an Infrastructure as Code (IaC) tool developed by HashiCorp. It is one of the widely used IaC tools to deploy and delete AWS infrastructure including EKS. In comparison to other options, using Terraform for EKS clusters has advantages. Firstly, Terraform provides **unified workflow** management if other AWS infrastructure components are deployed using Terraform. Secondly, Terraform enables **full lifecycle management** by creating, updating and deleting resources easily. Thirdly, Terraform determines resource dependency graphs before creating the EKS cluster.
 
@@ -110,6 +122,40 @@ To create and manage your EKS clusters, you need to create an IAM user with rele
     <img src="figures/eks_admin_1.png" style="max-width:50%; height:auto;">
     </p>
     <p align="left"><strong>Figure 1:</strong> Create IAM user for EKS </p>
+
+## EKS with AWS Console
+You can create your EKS cluster using the AWS management console. There are required fields that need to be populated for the EKS cluster to be created using the AWS console.
+
+- First, create Cluster IAM role and Node IAM role as shown in Figure 3.
+<figure>
+  <table>
+    <tr>
+      <td>
+        <img src="figures/eks_aws_console_2.png style="max-width:100%; height:auto;">
+      </td>
+      <td>
+        <img src="figures/eks_aws_console_3.png style="max-width:100%; height:auto;">
+      </td>
+    </tr>
+  </table>
+  <figcaption><strong>Figure 3: </strong> Creating Cluster IAM and Node IAM roles </figcaption>
+  </figure>
+
+Figure 3 shows the various fields that need to be filled to create Amazon EKS using the AWS console.
+  <figure>
+  <table>
+    <tr>
+      <td>
+        <img src="figures/eks_aws_console_1.png style="max-width:100%; height:auto;">
+      </td>
+      <td>
+        <img src="figures/eks_aws_console_2.png style="max-width:100%; height:auto;">
+      </td>
+    </tr>
+  </table>
+  <figcaption><strong>Figure 3: </strong> Modifying an existing instance </figcaption>
+  </figure>
+
 
 
 ## EKS with Terraform
@@ -141,11 +187,11 @@ The EKS dashboard is viewable from the organization's AWS management and delegat
   - Attach policy to the user. For example, **AmazonEKSClusterPolicy**, **AmazonEKSServicePolicy**, and **AmazonEC2ReadOnlyAccess**.
 * Step 3: Login from the delegated account to view the EKS Dashboard.
 
-Figure 3 displays the EKS cluster that was created according to the Terraform IaC code.
+Figure 4 displays the EKS cluster that was created according to the Terraform IaC code.
   <p align="left">
   <img src="figures/eks_cluster_dashboard_1.png" style="max-width:50%; height:auto;">
   </p>
-  <p align="left"><strong>Figure 3:</strong> EKS Cluster </p>
+  <p align="left"><strong>Figure 4:</strong> EKS Cluster </p>
 
 Various other details of the EKS cluster can be accessed via the dashboard. However, one of the most efficient ways to access and manage a K8s cluster is using the **kubectl**.
 
@@ -160,7 +206,7 @@ Figure 4 displays example *kubectl* commands such as **kubectl get nodes**, whic
 <p align="left">
   <img src="figures/eks_cluster_kubectl_1.png" style="max-width:50%; height:auto;">
   </p>
-  <p align="left"><strong>Figure 3:</strong> Kubectl commands </p>
+  <p align="left"><strong>Figure 4:</strong> Kubectl commands </p>
 
   
   
@@ -261,21 +307,7 @@ Finally, when there EKS cluster is no longer required, you can delete it using *
   ```
 -->
 
-<!--
-<figure>
-<table>
-  <tr>
-    <td>
-      <img src="figures/terraform_apply_3.png style="max-width:100%; height:auto;">
-    </td>
-    <td>
-      <img src="figures/terraform_apply_4.png style="max-width:100%; height:auto;">
-    </td>
-  </tr>
-</table>
-<figcaption><strong>Figure 4: </strong> Modifying an existing instance </figcaption>
-</figure>
--->
+
 
 
 <!--   ####################   TODO: Reuse or remove the content below    ########################   -->
@@ -388,10 +420,10 @@ Subsequently, use **helm** to deploy the Dashboard User Interface (UI), as follo
     helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard # If kubernetes-dashboard-csrf exists error, first run "kubectl delete secret kubernetes-dashboard-csrf -n kubernetes-dashboard"
 ```
 
-As can be seen in Figure 3, after the **helm** package manager finishes installing the Dashboard, a link to access it is given. In this case, that link is **https://localhost:8443**.
+As can be seen in Figure 5, after the **helm** package manager finishes installing the Dashboard, a link to access it is given. In this case, that link is **https://localhost:8443**.
 
 <p align="center">
   <img src="figures/dashboard_install_1.png" style="max-width:50%; height:auto;">
 </p>
-<p align="center"><strong>Figure 1:</strong> Dashboard installation </p>
+<p align="center"><strong>Figure 5:</strong> Dashboard installation </p>
 -->
