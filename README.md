@@ -176,20 +176,6 @@ AFter creating the cluster, its configuration and status can be monitored using 
   <table>
     <tr>
       <td>
-        <img src="figures/eks_aws_console_9.png" style="max-width:100%; height:auto;">
-      </td>
-      <td>
-        <img src="figures/eks_aws_console_10.png" style="max-width:100%; height:auto;">
-      </td>
-    </tr>
-  </table>
-  <figcaption><strong>Figure 6: </strong> EKS cluster details - part 2 </figcaption>
-  </figure>
-
-  <figure>
-  <table>
-    <tr>
-      <td>
         <img src="figures/eks_aws_console_7.png" style="max-width:100%; height:auto;">
       </td>
       <td>
@@ -198,6 +184,20 @@ AFter creating the cluster, its configuration and status can be monitored using 
     </tr>
   </table>
   <figcaption><strong>Figure 6: </strong> EKS cluster details - part 1 </figcaption>
+  </figure>
+
+  <figure>
+  <table>
+    <tr>
+      <td>
+        <img src="figures/eks_aws_console_9.png" style="max-width:100%; height:auto;">
+      </td>
+      <td>
+        <img src="figures/eks_aws_console_10.png" style="max-width:100%; height:auto;">
+      </td>
+    </tr>
+  </table>
+  <figcaption><strong>Figure 6: </strong> EKS cluster details - part 2 </figcaption>
   </figure>
 
 
