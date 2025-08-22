@@ -9,6 +9,7 @@
   - [EKS Architecture](#eks-architecture)
 - [Creating EKS Cluster](#creating-eks-cluster)
   - [EKS with AWS Console](#eks-with-aws-console)
+  - [EKS with eksctl](#eks-with-eksctl)
   - [EKS with Terraform](#eks-with-terraform)
 - [References](#references)
 # Introduction
@@ -202,6 +203,71 @@ AFter creating the cluster, its configuration and status can be monitored using 
 
 Finally, it is important to **delete the cluster** if it is not for production purposes, as is the case here. Otherwise, keeping the EKS cluster running will result in monetary charges to the AWS account holder. Moreover, there AWS account will be charged for the amount of time the EKS cluster was running until deletion according to Amazon's hourly rate for the EKS service.
 
+## EKS with eksctl
+Another way to create, deploy and manage EKS cluster is to use Amazon's own open-source [**eksctl**](https://github.com/eksctl-io/eksctl) tool. Unlike other IaC tools such as Terraform, eksctl can be used for EKS clusters, but not other Kubernetes services from other providers. Therefore, **eksctl** may not be the right tool for your based on the type of infrastructure you work with. For example, if you have hybrid-cloud infrastructure, vendor-agnostic tools such as Terraform are likely to fulfil your needs better. However, for AWS-based infrastructure environment *eksctl* can be used to create and administer EKS clusters.
+
+* Install and configure [AWS CLI](https://docs.aws.amazon.com/eks/latest/userguide/install-awscli.html)
+  ```bash
+    aws configure --profile edom # Configure access keys and region
+    export AWS_PROFILE=edom # Set default user
+  ```
+* Install [eksctl](https://eksctl.io/installation/) and [kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)
+    ```bash
+      ARCH=amd64 # for ARM systems, set ARCH to: `arm64`, `armv6` or `armv7`
+      PLATFORM=$(uname -s)_$ARCH
+      curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+      # Verify checksum
+      curl -sL "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_checksums.txt" | grep $PLATFORM | sha256sum --check
+      tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
+      sudo install -m 0755 /tmp/eksctl /usr/local/bin && rm /tmp/eksctl
+      eksctl info
+    ```
+By running **eksctl info**, if you got the version of eksctl and kubectl, that means you have installed both successfully.
+
+* Create EKS cluster(s) using eksctl
+``` bash
+  eksctl create cluster --name azkiflay-eks-cluster --region us-east-1
+```
+As displayed in Figure 8, the azkiflay-eks-cluster is created using the **eksctl** command above, which triggered the creation and deployment of AWS resources, including the CloudFormation stack. 
+
+  <figure>
+  <table>
+    <tr>
+      <td>
+        <img src="figures/eks_eksctl_1.png" style="max-width:100%; height:auto;">
+      </td>
+      <td>
+        <img src="figures/eks_eksctl_2.png" style="max-width:100%; height:auto;">
+      </td>
+    </tr>
+  </table>
+  <figcaption><strong>Figure 8: </strong> Creating an EKS cluster using eksctl </figcaption>
+  </figure>
+
+When the execution of the **eksctl** command completed, it displayed the messaged -- EKS cluster "azkiflay-eks-cluster" in "us-east-1" region is ready. This can be confirmed by logging it to the AWS console, showing the EKS cluster was indeed created and ready for application deployment.
+Similarly, the worker nodes in the EKS cluster can be listed using the **kubectl** command as follows.
+```bash
+  kubectl get nodes
+```
+Lastly, it is also easy to delete the EKS cluster as shown in the following.
+```bash
+  eksctl delete cluster --name azkiflay-eks-cluster --region us-east-1
+```
+Figure 9 shows the results of **kubectl get nodes**, and the **eksctl delete ...** commands above.
+<figure>
+  <table>
+    <tr>
+      <td>
+        <img src="figures/eks_eksctl_3.png" style="max-width:100%; height:auto;">
+      </td>
+      <td>
+        <img src="figures/eks_eksctl_4.png" style="max-width:100%; height:auto;">
+      </td>
+    </tr>
+  </table>
+  <figcaption><strong>Figure 8: </strong> Using eksctl to create an EKS cluster  </figcaption>
+  </figure>
+As can be seen on the right side of the figure, all cluster resources were deleted.
 
 ## EKS with Terraform
 One of the easiest ways to create an EKS cluster is using a [repository](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks) provided by HashiCorp. The Terraform configuration provisions security groups, Virtual Private Cloud (VPC), and an EKS cluster. 
