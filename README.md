@@ -131,10 +131,10 @@ You can create your EKS cluster using the AWS management console. There are requ
   <table>
     <tr>
       <td>
-        <img src="figures/eks_aws_console_2.png style="max-width:100%; height:auto;">
+        <img src="figures/eks_aws_console_1.png" style="max-width:100%; height:auto;">
       </td>
       <td>
-        <img src="figures/eks_aws_console_3.png style="max-width:100%; height:auto;">
+        <img src="figures/eks_aws_console_2.png" style="max-width:100%; height:auto;">
       </td>
     </tr>
   </table>
@@ -146,14 +146,14 @@ Figure 3 shows the various fields that need to be filled to create Amazon EKS us
   <table>
     <tr>
       <td>
-        <img src="figures/eks_aws_console_1.png style="max-width:100%; height:auto;">
+        <img src="figures/eks_aws_console_3.png" style="max-width:100%; height:auto;">
       </td>
       <td>
-        <img src="figures/eks_aws_console_2.png style="max-width:100%; height:auto;">
+        <img src="figures/eks_aws_console_4.png" style="max-width:100%; height:auto;">
       </td>
     </tr>
   </table>
-  <figcaption><strong>Figure 3: </strong> Modifying an existing instance </figcaption>
+  <figcaption><strong>Figure 3: </strong> Creating an EKS cluster using the AWS console </figcaption>
   </figure>
 
 
