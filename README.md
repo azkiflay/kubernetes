@@ -157,7 +157,7 @@ Figure 4 shows the various fields that need to be filled to create Amazon EKS us
   </figure>
 
 After clicking "**Create**", it takes a few minutes until the EKS cluster is ready. Figure 5 shows the progress and final state of the EKS cluster. When the value of the *Status* column is **Active**, the EKS cluster is ready for application deployment.
-<figure>
+  <figure>
   <table>
     <tr>
       <td>
@@ -168,7 +168,36 @@ After clicking "**Create**", it takes a few minutes until the EKS cluster is rea
       </td>
     </tr>
   </table>
-  <figcaption><strong>Figure 4: </strong> Creating an EKS cluster using the AWS console </figcaption>
+  <figcaption><strong>Figure 5: </strong> Creating an EKS cluster using the AWS console </figcaption>
+  </figure>
+
+AFter creating the cluster, its configuration and status can be monitored using the AWS console. Figure 6 and 7 show various tabs that show details of the EKS cluster.
+  <figure>
+  <table>
+    <tr>
+      <td>
+        <img src="figures/eks_aws_console_9.png" style="max-width:100%; height:auto;">
+      </td>
+      <td>
+        <img src="figures/eks_aws_console_10.png" style="max-width:100%; height:auto;">
+      </td>
+    </tr>
+  </table>
+  <figcaption><strong>Figure 6: </strong> EKS cluster details - part 2 </figcaption>
+  </figure>
+
+  <figure>
+  <table>
+    <tr>
+      <td>
+        <img src="figures/eks_aws_console_7.png" style="max-width:100%; height:auto;">
+      </td>
+      <td>
+        <img src="figures/eks_aws_console_8.png" style="max-width:100%; height:auto;">
+      </td>
+    </tr>
+  </table>
+  <figcaption><strong>Figure 6: </strong> EKS cluster details - part 1 </figcaption>
   </figure>
 
 
