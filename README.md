@@ -11,6 +11,11 @@
   - [EKS with AWS Console](#eks-with-aws-console)
   - [EKS with eksctl](#eks-with-eksctl)
   - [EKS with Terraform](#eks-with-terraform)
+- [Deploying Applications on EKS Cluster](#deploying-applications-on-eks-cluster)
+  - [Creating an EKS Cluster](#creating-an-eks-cluster)
+  - [Pods](#pods)
+  - [Creating a Deployment](#creating-a-deployment)
+  - [Exposing the Deployment](#exposing-the-deployment)
 - [References](#references)
 # Introduction
 Multiple Operating Systems (OSes) are able to run on a single server through virtualization solutions such as VMware, Xen, VirtualBox. Containerization tools (e.g., Docker) took hardware-level virtualization to the next level. Because containers provide OS-level virtualization, making application that run in containers to be self-contained. However, while containers solve problems, including package conflict and dependency, managing several containerized applications is not easy. While containers make it possible to deploy applications easily, managing so many of them created difficult. That's the where the need for container orchestration comes in, to create, deploy and manage thousands of containers. 
@@ -226,9 +231,9 @@ By running **eksctl info**, if you got the version of eksctl and kubectl, that m
 
 * Create EKS cluster(s) using eksctl
 ``` bash
-  eksctl create cluster --name azkiflay-eks-cluster --region us-east-1
+  eksctl create cluster --name azkiflay --region us-east-1
 ```
-As displayed in Figure 8, the azkiflay-eks-cluster is created using the **eksctl** command above, which triggered the creation and deployment of AWS resources, including the CloudFormation stack. 
+As displayed in Figure 8, the azkiflay is created using the **eksctl** command above, which triggered the creation and deployment of AWS resources, including the CloudFormation stack. 
 
   <figure>
   <table>
@@ -244,14 +249,14 @@ As displayed in Figure 8, the azkiflay-eks-cluster is created using the **eksctl
   <figcaption><strong>Figure 8: </strong> Creating an EKS cluster using eksctl </figcaption>
   </figure>
 
-When the execution of the **eksctl** command completed, it displayed the messaged -- EKS cluster "azkiflay-eks-cluster" in "us-east-1" region is ready. This can be confirmed by logging it to the AWS console, showing the EKS cluster was indeed created and ready for application deployment.
+When the execution of the **eksctl** command completed, it displayed the messaged -- EKS cluster "azkiflay" in "us-east-1" region is ready. This can be confirmed by logging it to the AWS console, showing the EKS cluster was indeed created and ready for application deployment.
 Similarly, the worker nodes in the EKS cluster can be listed using the **kubectl** command as follows.
 ```bash
   kubectl get nodes
 ```
 Lastly, it is also easy to delete the EKS cluster as shown in the following.
 ```bash
-  eksctl delete cluster --name azkiflay-eks-cluster --region us-east-1
+  eksctl delete cluster --name azkiflay --region us-east-1
 ```
 Figure 9 shows the results of **kubectl get nodes**, and the **eksctl delete ...** commands above.
 <figure>
@@ -319,9 +324,6 @@ Figure 4 displays example *kubectl* commands such as **kubectl get nodes**, whic
   </p>
   <p align="left"><strong>Figure 4:</strong> Kubectl commands </p>
 
-  
-  
-
 Finally, when there EKS cluster is no longer required, you can delete it using **terraform destroy**. You need to confirm the deletion by typing **yes**. Alternatively, if you are certain about what is to be deleted and you want to proceed with the deletion of the EKS cluster, you can simply issue **terraform destroy -auto-approve**.
   ```bash
     terraform destroy
@@ -330,6 +332,144 @@ Finally, when there EKS cluster is no longer required, you can delete it using *
     terraform destroy -auto-approve
   ```
 
+# Deploying Applications on EKS Cluster
+Generally, applications are deployed using one or more containers in Kubernetes. Similarly, application deployment in EKS is composed of Kubernetes components across different worker nodes. While some services are used inside the EKS cluster, others are exposed for external access.
+
+## Creating an EKS Cluster
+```bash
+  eksctl create cluster --name azkiflay --region us-east-1
+  kubectl get nodes
+  kubectl version
+```
+## Pods
+Specifically, applications run inside containers, which are in turn organized in Pods. One or more containers sharing the same namespace form a Pod in Kubernetes.
+
+To interact with the cluster, **kubectl** is used by an EKS administrator to deploy, update, or delete applications on the cluster. To facilitate the communication of the **kubectl** tool with the API server, the certificate, DNS name and other details can be configured in the local host's "**$HOME/.kube** directory as shown below.
+```bash
+  aws eks update-kubeconfig --name azkiflay --region us-east-1
+```
+Figure 10 shows ...
+
+
+
+To view the Kubernetes objects being created before it is sent to the API server, its manifest file can be reviewed as follows.
+```bash
+  kubectl run busybox --image=busybox --restart=Never --dry-run=client -o yaml
+```
+The result of the manifest is shown in Figure 11.
+
+Subsequently, the deployment process can be done using **kubectl** as shown below.
+```bash
+  kubectl run -it busybox --image=busybox --restart=Never
+```
+
+Figure 11 shows ...
+
+The status of the Pod in the EKS cluster can be viewed as shown below.
+```bash
+  kubectl get pods
+```
+
+Finally, you can delete the Pod.
+```bash
+  kubectl delete pod busybox
+```
+## Creating a Deployment
+Deployment allows you to manage the lifecycle of your application. It enables scaling up and down based on resource requirements of the application. Save the following in **deployment.yaml** file in the current directory.
+```bash 
+  ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azkiflay-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: azkiflay-app
+  template:
+    metadata:
+      labels:
+        app: azkiflay-app
+    spec:                      
+      containers:
+      - name: busybox
+        image: busybox:1.34.1
+        command:
+          - sleep
+          - "3600"
+```
+To create the deployment:
+  ```bash
+    kubectl create -f deployment.yaml
+  ```
+Figure 13 shows the message returned after successful deployment.
+
+To Verify the deployment:
+```bash
+  kubectl create -f deployment.yaml # Returns "azkiflay-deployment" already exists
+  kubectl get all  # Show all resources in current namespace
+```
+To scale up or scale down the deployment:
+```bash
+  kubectl scale deployment azkiflay-deployment --replicas=3
+  kukectl get all
+  kubectl scale deployment azkiflay-deployment --replicas=1
+  kukectl get all
+  kubectl rollout status deployment/azkiflay-deployment
+```
+
+
+## Exposing the Deployment
+service.yaml
+
+```bash
+  --- 
+  apiVersion: v1 
+  kind: Service 
+  metadata: 
+    name: azkiflay-app
+  spec: 
+    type: ClusterIP 
+    ports: 
+      - protocol: TCP 
+      port: 80 
+      targetPort: 9376
+    selector: 
+      app: azkiflay-app
+```
+To verify the Service:
+```bash
+  kubectl create -f service.yaml
+  kubectl get svc -o wide
+  kubectl describe service azkiflay-app
+  kubectl delete svc azkiflay-app
+```
+
+```bash
+  apiVersion: v1 
+  kind: Service 
+  metadata: 
+    name: azkiflay-app-public
+  spec: 
+    type: NodePort
+    ports: 
+      - protocol: 
+      TCP port: 80
+    selector: 
+      app: azkiflay-nginx-app
+```
+
+```bash
+  kubectl create -f nodeport-service.yaml
+  kubectl get svc -o wide
+  kubectl describe service azkiflay-app-public
+  kubectl get service
+```
+
+```bash
+  eksctl delete cluster --name azkiflay --region us-east-1
+```
 
 # References
 * Kubernetes documentation: https://kubernetes.io/docs/
