@@ -141,7 +141,7 @@ You can create your EKS cluster using the AWS management console. There are requ
   <figcaption><strong>Figure 3: </strong> Creating Cluster IAM and Node IAM roles </figcaption>
   </figure>
 
-Figure 3 shows the various fields that need to be filled to create Amazon EKS using the AWS console.
+Figure 4 shows the various fields that need to be filled to create Amazon EKS using the AWS console.
   <figure>
   <table>
     <tr>
@@ -153,7 +153,22 @@ Figure 3 shows the various fields that need to be filled to create Amazon EKS us
       </td>
     </tr>
   </table>
-  <figcaption><strong>Figure 3: </strong> Creating an EKS cluster using the AWS console </figcaption>
+  <figcaption><strong>Figure 4: </strong> Creating an EKS cluster using the AWS console </figcaption>
+  </figure>
+
+After clicking "**Create**", it takes a few minutes until the EKS cluster is ready. Figure 5 shows the progress and final state of the EKS cluster. When the value of the *Status* column is **Active**, the EKS cluster is ready for application deployment.
+<figure>
+  <table>
+    <tr>
+      <td>
+        <img src="figures/eks_aws_console_5.png" style="max-width:100%; height:auto;">
+      </td>
+      <td>
+        <img src="figures/eks_aws_console_6.png" style="max-width:100%; height:auto;">
+      </td>
+    </tr>
+  </table>
+  <figcaption><strong>Figure 4: </strong> Creating an EKS cluster using the AWS console </figcaption>
   </figure>
 
 
