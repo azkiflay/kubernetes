@@ -200,6 +200,7 @@ AFter creating the cluster, its configuration and status can be monitored using 
   <figcaption><strong>Figure 6: </strong> EKS cluster details - part 2 </figcaption>
   </figure>
 
+Finally, it is important to **delete the cluster** if it is not for production purposes, as is the case here. Otherwise, keeping the EKS cluster running will result in monetary charges to the AWS account holder.
 
 
 ## EKS with Terraform
