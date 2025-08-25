@@ -490,6 +490,7 @@ To delete the EKS cluster:
 ```bash
   terraform destroy -auto-approve
 ```
+Alternatively, you can use "**eksctl**" to delete the cluster. However, you need to provide the cluster name and other parameters to the *eksctl* tool, making this option less efficient. In Terraform, you do not have to remember these details as they are retrieved from the state file.
 
 # References
 * Kubernetes documentation: https://kubernetes.io/docs/
