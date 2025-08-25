@@ -221,11 +221,11 @@ For example, if you have hybrid-cloud infrastructure, vendor-agnostic tools such
     ```
 If you got the version of eksctl and kubectl after running "**eksctl info**", that means you have successfully installed eksctl and kubectl.
 
-* Create EKS cluster using eksctl
+* Create EKS cluster using eksctl. Note that originally, the cluster name "*azkiflay-eks-cluster*" was the name of the cluster in the following examples, as can be seen in the screenshots. However, the shorter name "*azkiflay*" has been used in the commands for brevity, specially so because EKS also adds a prefix of "*eksctl*" and a postfix of "*cluster*" to the name. Accordingly, later EKS examples will use the short name "azkiflay".
 ``` bash
-  eksctl create cluster --name azkiflay-eks-cluster --region us-east-1
+  eksctl create cluster --name azkiflay --region us-east-1 
 ```
-As displayed in Figure 8, the azkiflay-eks-cluster is created using the **eksctl** command above, which triggered the creation and deployment of AWS resources, including the CloudFormation stack. 
+As displayed in Figure 8, the azkiflay is created using the **eksctl** command above, which triggered the creation and deployment of AWS resources, including the CloudFormation stack. 
 
   <figure>
   <table>
@@ -241,14 +241,14 @@ As displayed in Figure 8, the azkiflay-eks-cluster is created using the **eksctl
   <figcaption><strong>Figure 8: </strong> Creating an EKS cluster using eksctl </figcaption>
   </figure>
 
-When the execution of the **eksctl** command completed, it displayed the messaged -- EKS cluster "azkiflay-eks-cluster" in "us-east-1" region is ready. This can be confirmed by logging it to the AWS console, showing the EKS cluster was indeed created and ready for application deployment.
+When the execution of the **eksctl** command completed, it displayed the messaged -- EKS cluster "azkiflay" in "us-east-1" region is ready. This can be confirmed by logging it to the AWS console, showing the EKS cluster was indeed created and ready for application deployment.
 Similarly, the worker nodes in the EKS cluster can be listed using the **kubectl** command as follows.
 ```bash
   kubectl get nodes
 ```
 Lastly, it is also easy to delete the EKS cluster as shown in the following.
 ```bash
-  eksctl delete cluster --name azkiflay-eks-cluster --region us-east-1
+  eksctl delete cluster --name azkiflay --region us-east-1
 ```
 Figure 9 shows the results of **kubectl get nodes**, and the **eksctl delete ...** commands above.
 <figure>
@@ -331,7 +331,7 @@ Generally, applications are deployed using one or more containers in Kubernetes.
 
 ## Creating an EKS Cluster
 ```bash
-  eksctl create cluster --name azkiflay-eks-cluster --region us-east-1
+  eksctl create cluster --name azkiflay --region us-east-1
   kubectl get nodes
   kubectl version
 ```
@@ -340,7 +340,7 @@ Specifically, applications run inside containers, which are in turn organized in
 
 To interact with the cluster, **kubectl** is used by an EKS administrator to deploy, update, or delete applications on the cluster. To facilitate the communication of the **kubectl** tool with the API server, the certificate, DNS name and other details can be configured in the local host's "**$HOME/.kube** directory as shown below.
 ```bash
-  aws eks update-kubeconfig --name azkiflay-eks-cluster --region us-east-1
+  aws eks update-kubeconfig --name azkiflay --region us-east-1
 ```
 Figure 10 shows ...
 
@@ -463,7 +463,7 @@ To verify the Service:
 ```
 
 ```bash
-  eksctl delete cluster --name azkiflay-eks-cluster --region us-east-1
+  eksctl delete cluster --name azkiflay --region us-east-1
 ```
 
 # References
