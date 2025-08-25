@@ -273,7 +273,7 @@ Terraform is an Infrastructure as Code (IaC) tool developed by HashiCorp. It is 
 
 Firstly, Terraform provides *unified workflow* management when other AWS infrastructure components are also deployed using Terraform. Secondly, Terraform enables *full lifecycle management* by creating, updating and deleting resources easily. Thirdly, Terraform determines resource dependency graphs before creating the EKS cluster.
 
-One of the easiest ways to create an EKS cluster is using a [Terraform repository](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks) provided by HashiCorp. The Terraform configuration provisions security groups, Virtual Private Cloud (VPC), and an EKS cluster. 
+One of the easiest ways to create an EKS cluster is using a [Terraform's EKS repository](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks) provided by HashiCorp. The Terraform configuration provisions security groups, Virtual Private Cloud (VPC), and an EKS cluster. 
 
 The following demonstrates how EKS clusters can be created using Terraform. </br>
 **WARNING:** YOU WILL BE CHARGED when you execute these commands, according to [Amazon EKS pricing](https://aws.amazon.com/eks/pricing/). Therefore, remember to issue "**terrafrom destroy**" after you are done with your experimentation so that you DO NOT LEAVE any EKS clusters running, for which you will be charged.
