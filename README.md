@@ -273,10 +273,11 @@ Terraform is an Infrastructure as Code (IaC) tool developed by HashiCorp. It is 
 
 Firstly, Terraform provides *unified workflow* management when other AWS infrastructure components are also deployed using Terraform. Secondly, Terraform enables *full lifecycle management* by creating, updating and deleting resources easily. Thirdly, Terraform determines resource dependency graphs before creating the EKS cluster.
 
-One of the easiest ways to create an EKS cluster is using a [Terraform's EKS repository](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks) provided by HashiCorp. The Terraform configuration provisions security groups, Virtual Private Cloud (VPC), and an EKS cluster. 
+One of the easiest ways to create an EKS cluster is using a [HashiCorp's example for creating an EKS cluster](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks). The Terraform configuration file creates an EKS cluster by creating various resources, including security groups, worker nodes, VPC, and related roles and permissions. Details of the repository file are available in the *learn-terraform-provision-eks-cluster* subdirectory.
 
 The following demonstrates how EKS clusters can be created using Terraform. </br>
-**WARNING:** YOU WILL BE CHARGED when you execute these commands, according to [Amazon EKS pricing](https://aws.amazon.com/eks/pricing/). Therefore, remember to issue "**terrafrom destroy**" after you are done with your experimentation so that you DO NOT LEAVE any EKS clusters running, for which you will be charged.
+**WARNING:** YOU WILL BE CHARGED when you execute these commands, according to [Amazon EKS pricing](https://aws.amazon.com/eks/pricing/). Therefore, remember to issue "**terrafrom destroy**" after you are done with your experimentation so that you DO NOT LEAVE any EKS cluster running.
+
   ```bash
     git clone https://github.com/hashicorp/learn-terraform-provision-eks-cluster
     cd learn-terraform-provision-eks-cluster/ 
@@ -284,7 +285,18 @@ The following demonstrates how EKS clusters can be created using Terraform. </br
     terraform plan
     terraform apply
   ```
-After the EKS is created, it can be managed using **EKS dashboard** or the **kubectl** tool. In the former, note that the EKS dashboard may be accessible from a specific region, as shown in Figure 2, which requests to switching to the *us-east-1* region.
+
+Figure 4 displays the EKS cluster that was created according to the Terraform IaC code.
+  <p align="left">
+  <img src="figures/eks_cluster_dashboard_1.png" style="max-width:50%; height:auto;">
+  </p>
+  <p align="left"><strong>Figure 4:</strong> EKS Cluster </p>
+
+The name of the EKS cluster starts with a "*education-eks-*", where the last eight characters of the name are randomly generated using the "*random_string*" resource in the HashiCorp code. Instead, a fixed name can be assigned for the EKS cluster in the **locals** block. For example by setting "**cluster_name = "azkiflay"**" in the locals block. The AWS region for the EKS cluster can be changed in the "*variables.tf*". For example, in this case the region has been set to "*eu-west-2*" (London).
+
+After the EKS is created, it can be managed using **EKS dashboard** or the **kubectl** tool. In the former, note that the EKS dashboard may be accessible from a specific region, as shown in Figure 2, which requests switching to the *us-east-1* region. Note that many other variables can be changed from their default values provided by the HashiCorp's Terraform configuration, but there are dependency factors that may cause errors due to version mismatch. 
+
+For example, in the "**eks**" module, changing the default "**cluster_version**" from its current default value of "**1.29**" to the latest version of **1.33**, while keeping "**ami_type = "AL2_x86_64"**" resulted in error due to lack of support for AL2_x86_64 in EKS/Kubernetes **1.33**. Note this may change in the future.
     <p align="left">
     <img src="figures/eks_admin_dashboard_1.png" style="max-width:50%; height:auto;">
     </p>
@@ -301,11 +313,6 @@ The EKS dashboard is viewable from the organization's AWS management and delegat
   - Attach policy to the user. For example, **AmazonEKSClusterPolicy**, **AmazonEKSServicePolicy**, and **AmazonEC2ReadOnlyAccess**.
 * Step 3: Login from the delegated account to view the EKS Dashboard.
 
-Figure 4 displays the EKS cluster that was created according to the Terraform IaC code.
-  <p align="left">
-  <img src="figures/eks_cluster_dashboard_1.png" style="max-width:50%; height:auto;">
-  </p>
-  <p align="left"><strong>Figure 4:</strong> EKS Cluster </p>
 
 Various other details of the EKS cluster can be accessed via the dashboard. However, one of the most efficient ways to access and manage a K8s cluster is using the **kubectl**.
 
