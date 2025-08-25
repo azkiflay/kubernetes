@@ -453,12 +453,13 @@ To create and verify a ClusterIP service:
   kubectl create -f cluster-service.yaml
   kubectl get svc -o wide
   kubectl describe service azkiflay-cluster-service
+  kubectl get nodes
 ```
 The results of the above commands are shown in Figure 14 below.
   <p align="left">
   <img src="figures/eks_deployment_5.png" style="max-width:50%; height:auto;">
   </p>
-  <p align="left"><strong>Figure 14:</strong> Scaling up and down </p>
+  <p align="left"><strong>Figure 14:</strong> Cluster IP Service </p>
 
 
 To delete the ClusterIP service:
@@ -466,16 +467,28 @@ To delete the ClusterIP service:
   kubectl delete svc azkiflay-cluster-service
 ```
 
+To create a NodePort service:
 
 ```bash
   kubectl create -f nodeport-service.yaml
   kubectl get svc -o wide
-  kubectl describe service azkiflay-app-public
-  kubectl get service
+  kubectl describe service azkiflay-nodeport-service
+```
+The results of the above commands are shown in Figure 15 below.
+  <p align="left">
+  <img src="figures/eks_deployment_6.png" style="max-width:50%; height:auto;">
+  </p>
+  <p align="left"><strong>Figure 15:</strong> NodePort Service </p>
+
+
+To delete the ClusterIP service:
+```bash
+  kubectl delete svc azkiflay-nodeport-service
 ```
 
+To delete the EKS cluster:
 ```bash
-  eksctl delete cluster --name azkiflay --region us-east-1
+  terraform destroy -auto-approve
 ```
 
 # References
