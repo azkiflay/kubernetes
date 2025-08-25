@@ -225,7 +225,7 @@ If you got the version of eksctl and kubectl after running "**eksctl info**", th
 ``` bash
   eksctl create cluster --name azkiflay --region us-east-1 
 ```
-As displayed in Figure 7, the azkiflay is created using the **eksctl** command above, which triggered the creation and deployment of AWS resources, including the CloudFormation stack. 
+As displayed in Figure 7, the "*azkiflay*" cluster is created using the **eksctl** command above, which triggered the creation and deployment of AWS resources, including the CloudFormation stack. 
 
   <figure>
   <table>
