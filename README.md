@@ -302,8 +302,6 @@ For example, in the "**eks**" module, changing the default "**cluster_version**"
   </p>
   <p align="left"><strong>Figure 2:</strong> Switching to the default region to access EKS Dashboard </p>
 
-
-
 Various other details of the EKS cluster can be accessed via the dashboard. However, one of the most efficient ways to access and manage a K8s cluster is using the **kubectl**.
 
   ```bash
