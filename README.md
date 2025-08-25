@@ -241,7 +241,7 @@ As displayed in Figure 8, the azkiflay is created using the **eksctl** command a
   <figcaption><strong>Figure 8: </strong> Creating an EKS cluster using eksctl </figcaption>
   </figure>
 
-Note that originally, the cluster name "*azkiflay-eks-cluster*" was the name of the cluster in the following examples, as can be seen in the screenshots. However, the shorter name "*azkiflay*" has been used in the commands for brevity, specially so because EKS also adds a prefix of "*eksctl*" and a postfix of "*cluster*" to the name. Accordingly, later EKS examples will use the short name "azkiflay".
+**Note**: Originally, the cluster name "*azkiflay-eks-cluster*" was used in the EKS examples, as can be seen in the screenshots. However, the shorter name "*azkiflay*" has been used in the commands for brevity, specially so because EKS also adds a prefix of "*eksctl*" and a postfix of "*cluster*" to the cluster name. Accordingly, later EKS examples will use the short name "azkiflay".
 
 When the execution of the **eksctl** command completed, it displayed the messaged -- EKS cluster "azkiflay" in "us-east-1" region is ready. This can be confirmed by logging it to the AWS console, showing the EKS cluster was indeed created and ready for application deployment.
 Similarly, the worker nodes in the EKS cluster can be listed using the **kubectl** command as follows.
