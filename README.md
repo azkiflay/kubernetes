@@ -8,6 +8,7 @@
 - [Amazon Elastic Kubernetes Service (EKS)](#amazon-elastic-kubernetes-service-eks)
   - [EKS Architecture](#eks-architecture)
 - [Creating EKS Cluster](#creating-eks-cluster)
+  - [IAM user for EKS](#iam-user-for-eks)
   - [EKS with AWS Console](#eks-with-aws-console)
   - [EKS with eksctl](#eks-with-eksctl)
   - [EKS with Terraform](#eks-with-terraform)
@@ -15,7 +16,7 @@
   - [Creating an EKS Cluster](#creating-an-eks-cluster)
   - [Pods](#pods)
   - [Creating a Deployment](#creating-a-deployment)
-  - [Exposing the Deployment](#exposing-the-deployment)
+  - [Service Objects to Expose Applications](#service-objects-to-expose-applications)
 - [References](#references)
 # Introduction
 Multiple Operating Systems (OSes) are able to run on a single server through virtualization solutions such as VMware, Xen, VirtualBox. Containerization tools (e.g., Docker) took hardware-level virtualization to the next level. Because containers provide OS-level virtualization, making application that run in containers to be self-contained. However, while containers solve problems, including package conflict and dependency, managing several containerized applications is not easy. While containers make it possible to deploy applications easily, managing so many of them created difficult. That's the where the need for container orchestration comes in, to create, deploy and manage thousands of containers. 
@@ -121,13 +122,13 @@ The EKS worker plane includes the following: </br>
 - **Cluster Security Group**: virtual firewall to control traffic between the control plane and worker plane.
   
 # Creating EKS Cluster
-EKS clusters can be created and managed using the AWS Console, AWS CLI, CloudFormation, **eksctl**, or Terraform. Terraform is an Infrastructure as Code (IaC) tool developed by HashiCorp. It is one of the widely used IaC tools to deploy and delete AWS infrastructure including EKS. In comparison to other options, using Terraform for EKS clusters has advantages. Firstly, Terraform provides **unified workflow** management if other AWS infrastructure components are deployed using Terraform. Secondly, Terraform enables **full lifecycle management** by creating, updating and deleting resources easily. Thirdly, Terraform determines resource dependency graphs before creating the EKS cluster.
-
+EKS clusters can be created and managed using Terraform, AWS Console, AWS CLI, eksctl.
+## IAM user for EKS 
 To create and manage your EKS clusters, you need to create an IAM user with relevant permissions. One way to do that easily is to create an administrator account on AWS Console as shown in Figure 1 below.
     <p align="left">
     <img src="figures/eks_admin_1.png" style="max-width:50%; height:auto;">
     </p>
-    <p align="left"><strong>Figure 1:</strong> Create IAM user for EKS </p>
+    <p align="left"><strong>Figure 1:</strong> Creating IAM user for EKS administration </p>
 
 ## EKS with AWS Console
 You can create your EKS cluster using the AWS management console. There are required fields that need to be populated for the EKS cluster to be created using the AWS console.
@@ -275,6 +276,8 @@ Figure 9 shows the results of **kubectl get nodes**, and the **eksctl delete ...
 As can be seen on the right side of the figure, all cluster resources were deleted.
 
 ## EKS with Terraform
+Terraform is an Infrastructure as Code (IaC) tool developed by HashiCorp. It is one of the widely used IaC tools to deploy and delete AWS infrastructure including EKS. Using Terraform for EKS clusters has advantages over other options. Firstly, Terraform provides *unified workflow* management when other AWS infrastructure components are also deployed using Terraform. Secondly, Terraform enables *full lifecycle management* by creating, updating and deleting resources easily. Thirdly, Terraform determines resource dependency graphs before creating the EKS cluster.
+
 One of the easiest ways to create an EKS cluster is using a [repository](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks) provided by HashiCorp. The Terraform configuration provisions security groups, Virtual Private Cloud (VPC), and an EKS cluster. 
 
 The following demonstrates how EKS clusters can be created using Terraform. </br>
@@ -420,7 +423,8 @@ To scale up or scale down the deployment:
 ```
 
 
-## Exposing the Deployment
+## Service Objects to Expose Applications
+
 service.yaml
 
 ```bash
