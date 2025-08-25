@@ -15,6 +15,7 @@
 - [Deploying Applications on EKS Cluster](#deploying-applications-on-eks-cluster)
   - [Creating an EKS Cluster](#creating-an-eks-cluster)
   - [Pods](#pods)
+  - [Busybox](#busybox)
   - [Creating a Deployment](#creating-a-deployment)
   - [Service Objects to Expose Applications](#service-objects-to-expose-applications)
 - [References](#references)
@@ -298,7 +299,7 @@ After the EKS is created, it can be managed using **EKS dashboard** or the **kub
 For example, in the "**eks**" module, changing the default "**cluster_version**" from its current default value of "**1.29**" to the latest version of **1.33**, while keeping "**ami_type = "AL2_x86_64"**" resulted in error due to lack of support for AL2_x86_64 in EKS/Kubernetes **1.33**. Note this may change in the future.
 
 Figure 9 displays the created EKS cluster, as well as example *kubectl* commands such as **kubectl get nodes** to show the number of worker nodes that were attached to the EKS cluster.
-<p align="left">
+  <p align="left">
   <img src="figures/eks_cluster_kubectl_3.png" style="max-width:50%; height:auto;">
   </p>
   <p align="left"><strong>Figure 4:</strong> Kubectl commands </p>
@@ -314,7 +315,7 @@ Figure 9 displays the created EKS cluster, as well as example *kubectl* commands
       </td>
     </tr>
   </table>
-  <figcaption><strong>Figure 8: </strong> The EKS cluster and nodes </figcaption>
+  <figcaption><strong>Figure 9: </strong> The EKS cluster and nodes </figcaption>
   </figure>
 
 
@@ -331,9 +332,7 @@ Various other details of the EKS cluster can be accessed via the dashboard. Howe
   kubectl get nodes
   ```
 
-
-
-Finally, when there EKS cluster is no longer required, you can delete it using **terraform destroy**. You need to confirm the deletion by typing **yes**. Alternatively, if you are certain about what is to be deleted and you want to proceed with the deletion of the EKS cluster, you can simply issue **terraform destroy -auto-approve**.
+Finally, when there EKS cluster is no longer required, you can delete it using **terraform destroy**. You need to confirm the deletion by typing **yes**. Alternatively, if you are certain about what is to be deleted and you want to proceed with the deletion of the EKS cluster, you can simply issue **terraform destroy -auto-approve**. However, we need to use the EKS cluster to deploy an application in [#deploying-applications-on-eks-cluster], the following commands will not be issued until the cluster is no longer needed.
   ```bash
     terraform destroy
   ```
@@ -341,7 +340,7 @@ Finally, when there EKS cluster is no longer required, you can delete it using *
     terraform destroy -auto-approve
   ```
 
-The EKS dashboard is viewable from the organization's AWS management and delegated administrator accounts. Particularly, specific steps need to be taken to enable and view the EKS dashboard as displayed in Figure 2.
+Furthermore, the EKS dashboard is viewable from the organization's AWS management and delegated administrator accounts. Particularly, specific steps need to be taken to enable and view the EKS dashboard as displayed in Figure 2.
     <p align="left">
     <img src="figures/eks_admin_dashboard_2.png" style="max-width:50%; height:auto;">
     </p>
@@ -357,8 +356,9 @@ The EKS dashboard is viewable from the organization's AWS management and delegat
 Generally, applications are deployed using one or more containers in Kubernetes. Similarly, application deployment in EKS is composed of Kubernetes components across different worker nodes. While some services are used inside the EKS cluster, others are exposed for external access.
 
 ## Creating an EKS Cluster
+If you do not have a running EKS cluster, create one using **eksctl**, [Terraform](#eks-with-terraform) or [AWS console](#eks-with-aws-console).
 ```bash
-  eksctl create cluster --name azkiflay --region us-east-1
+  eksctl create cluster --name azkiflay --region eu-west-2
   kubectl get nodes
   kubectl version
 ```
@@ -367,33 +367,53 @@ In EKS and other Kubernetes services, applications run inside containers, which 
 
 To facilitate the communication of the **kubectl** tool with the API server, the certificate, DNS name and other details can be configured in the local host's "**$HOME/.kube** directory as shown below.
 ```bash
-  aws eks update-kubeconfig --name azkiflay --region us-east-1
+  aws eks update-kubeconfig --name azkiflay --region eu-west-2
 ```
-Figure 10 shows ...
+## Busybox
+As an example application to deploy in the EKS cluster, the **busybox** Linux container. It is a minimal container that combines Linux commands such as **ls**, **cp**, **echo**, **cat**, etc. It is suitable for testing purposes due to its minimal size.
 
-
-To view the Kubernetes objects being created before it is sent to the API server, its manifest file can be reviewed as follows.
+Having created the EKS cluster, you can use the *busybox** container as a sample application to be deployed on top of the cluster. The deployment of the container image on the EKS cluster is done using the **kubectl** tool.
+But before actually running the *busybox* image, lets us view the Kubernetes objects that will be created when *kubectl* communicates with the API server. The manifest file can be reviewed as follows.
 ```bash
   kubectl run busybox --image=busybox --restart=Never --dry-run=client -o yaml
+   kubectl delete pod busybox
 ```
-The result of the manifest is shown in Figure 11.
 
-Subsequently, the deployment process can be done using **kubectl** as shown below.
+Subsequently, you can deploy the *busybox* image on the EKS cluster using **kubectl** as shown below.
 ```bash
   kubectl run -it busybox --image=busybox --restart=Never
 ```
-
-Figure 11 shows ...
-
 The status of the Pod in the EKS cluster can be viewed as shown below.
 ```bash
   kubectl get pods
 ```
 
+As shown in Figure 11, the busybox has been deployed on the EKS cluster.
+<figure>
+  <table>
+    <tr>
+      <td>
+        <img src="figures/eks_teks_deployment_1erraform_2.png" style="max-width:100%; height:auto;">
+      </td>
+      <td>
+        <img src="figures/eks_deployment_2.png" style="max-width:100%; height:auto;">
+      </td>
+    </tr>
+  </table>
+  <figcaption><strong>Figure 11: </strong> Busybox on EKS cluster </figcaption>
+  </figure>
+
+
+<p align="left">
+  <img src="figures/eks_deployment_1.png" style="max-width:50%; height:auto;">
+  </p>
+  <p align="left"><strong>Figure 11:</strong> Busybox on EKS cluster </p>
+
 Finally, you can delete the Pod.
 ```bash
   kubectl delete pod busybox
 ```
+
 ## Creating a Deployment
 Deployment allows you to manage the lifecycle of your application. It enables scaling up and down based on resource requirements of the application. Save the following in **deployment.yaml** file in the current directory.
 ```bash 
