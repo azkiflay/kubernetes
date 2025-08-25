@@ -376,7 +376,7 @@ Having created the EKS cluster, you can use the *busybox** container as a sample
 But before actually running the *busybox* image, lets us view the Kubernetes objects that will be created when *kubectl* communicates with the API server. The manifest file can be reviewed as follows.
 ```bash
   kubectl run busybox --image=busybox --restart=Never --dry-run=client -o yaml
-   kubectl delete pod busybox
+  kubectl delete pod busybox
 ```
 
 Subsequently, you can deploy the *busybox* image on the EKS cluster using **kubectl** as shown below.
@@ -393,7 +393,7 @@ As shown in Figure 11, the busybox has been deployed on the EKS cluster.
   <table>
     <tr>
       <td>
-        <img src="figures/eks_teks_deployment_1erraform_2.png" style="max-width:100%; height:auto;">
+        <img src="figures/eks_deployment_1.png" style="max-width:100%; height:auto;">
       </td>
       <td>
         <img src="figures/eks_deployment_2.png" style="max-width:100%; height:auto;">
