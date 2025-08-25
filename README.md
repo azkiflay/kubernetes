@@ -435,51 +435,37 @@ Using a YAML file for is convenient for scaling up and scaling down the deployme
 ```
 
 The effect of scaling up and down using the "*--replicas*" option is shown Figure 13.
-<p align="left">
+  <p align="left">
   <img src="figures/eks_deployment_4.png" style="max-width:50%; height:auto;">
   </p>
   <p align="left"><strong>Figure 13:</strong> Scaling up and down </p>
 
+As can be seen in the "*DESIRED*", "*CURRENT*", and "*READY*" columns, the number of *Pods* were changed according to the value set for "*--replicas*" parameter in the *kubectl* command. By contrast, managing individual pods as discussed [earlier](#busybox) would be time-consuming and less efficient. Therefore, deployments are necessary to flexibly scale up and down the number of pods required for an application.
+
+To delete the deployment:
+```bash
+  kubectl delete -f deployment.yaml
+```
+
 ## Service Objects to Expose Applications
-
-service.yaml
-
+To create and verify a ClusterIP service:
 ```bash
-  --- 
-  apiVersion: v1 
-  kind: Service 
-  metadata: 
-    name: azkiflay-app
-  spec: 
-    type: ClusterIP 
-    ports: 
-      - protocol: TCP 
-      port: 80 
-      targetPort: 9376
-    selector: 
-      app: azkiflay-app
-```
-To verify the Service:
-```bash
-  kubectl create -f service.yaml
+  kubectl create -f cluster-service.yaml
   kubectl get svc -o wide
-  kubectl describe service azkiflay-app
-  kubectl delete svc azkiflay-app
+  kubectl describe service azkiflay-cluster-service
+```
+The results of the above commands are shown in Figure 14 below.
+  <p align="left">
+  <img src="figures/eks_deployment_5.png" style="max-width:50%; height:auto;">
+  </p>
+  <p align="left"><strong>Figure 14:</strong> Scaling up and down </p>
+
+
+To delete the ClusterIP service:
+```bash
+  kubectl delete svc azkiflay-cluster-service
 ```
 
-```bash
-  apiVersion: v1 
-  kind: Service 
-  metadata: 
-    name: azkiflay-app-public
-  spec: 
-    type: NodePort
-    ports: 
-      - protocol: 
-      TCP port: 80
-    selector: 
-      app: azkiflay-nginx-app
-```
 
 ```bash
   kubectl create -f nodeport-service.yaml
