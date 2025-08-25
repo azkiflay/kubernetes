@@ -265,7 +265,7 @@ Figure 8 shows the results of "**kubectl get nodes**", and the "**eksctl delete 
       </td>
     </tr>
   </table>
-  <figcaption><strong>Figure 8: </strong> View worker nodes and deleting the EKS cluster  </figcaption>
+  <figcaption><strong>Figure 8: </strong> Viewing worker nodes and deleting the EKS cluster  </figcaption>
   </figure>
 
 ## EKS with Terraform
