@@ -150,7 +150,7 @@ Figure 4 shows the various fields that need to be filled to create Amazon EKS us
   <figcaption><strong>Figure 4: </strong> Creating an EKS cluster using the AWS console </figcaption>
   </figure>
 
-After clicking "**Create**", it takes a few minutes until the EKS cluster is ready. Figure 5 shows the progress and final state of the EKS cluster. When the value of the *Status* column is **Active**, the EKS cluster is ready for application deployment.
+After clicking "**Create**", it takes a few minutes until the EKS cluster is ready. Figure 5 shows the progress and final state of the EKS cluster. When the value of the "*Status*" column is **Active**, the EKS cluster is ready for application deployment.
   <figure>
   <table>
     <tr>
@@ -165,7 +165,7 @@ After clicking "**Create**", it takes a few minutes until the EKS cluster is rea
   <figcaption><strong>Figure 5: </strong> Creating an EKS cluster using the AWS console </figcaption>
   </figure>
 
-AFter creating the cluster, its configuration and status can be monitored using the AWS console. Figure 6 and 7 show various tabs that show details of the EKS cluster.
+After creating the cluster, its configuration and status can be monitored using the AWS console. Figure 6 and 7 show various tabs that show details of the EKS cluster.
   <figure>
   <table>
     <tr>
@@ -194,7 +194,7 @@ AFter creating the cluster, its configuration and status can be monitored using 
   <figcaption><strong>Figure 6: </strong> EKS cluster details - part 2 </figcaption>
   </figure>
 
-Finally, it is important to **delete the cluster** if it is not for production purposes, as is the case here. Otherwise, keeping the EKS cluster running will result in monetary charges to the AWS account holder. Moreover, there AWS account will be charged for the amount of time the EKS cluster was running until deletion according to Amazon's hourly rate for the EKS service.
+Finally, it is important to **delete the cluster** if it is not used for production purposes, as is the case here. Otherwise, keeping the EKS cluster running will result in monetary charges to the AWS account holder. Moreover, the AWS account will be charged for the amount of time the EKS cluster was running until deletion according to Amazon's hourly rate for the EKS service. Amazon EKS pricing is available [here](https://aws.amazon.com/eks/pricing/). Note that the same price rates are applicable regardless of the tool used to create the EKS cluster. In other words, you need to ensure to delete EKS clusters that you create using tools other than the AWS management console, such as Terraform, AWS CLI and *eksctl*.
 
 ## EKS with eksctl
 Another way to create, deploy and manage EKS cluster is to use Amazon's own open-source [**eksctl**](https://github.com/eksctl-io/eksctl) tool. Unlike other IaC tools such as Terraform, eksctl can be used for EKS clusters, but not other Kubernetes services from other providers. Therefore, **eksctl** may not be the right tool for your based on the type of infrastructure you work with. For example, if you have hybrid-cloud infrastructure, vendor-agnostic tools such as Terraform are likely to fulfil your needs better. However, for AWS-based infrastructure environment *eksctl* can be used to create and administer EKS clusters.
