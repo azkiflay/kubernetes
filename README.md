@@ -403,57 +403,42 @@ As shown in Figure 11, the busybox has been deployed on the EKS cluster.
   <figcaption><strong>Figure 11: </strong> Busybox on EKS cluster </figcaption>
   </figure>
 
-
 Finally, you can delete the Pod.
 ```bash
   kubectl delete pod busybox
 ```
 
 ## Creating a Deployment
-Deployment allows you to manage the lifecycle of your application. It enables scaling up and down based on resource requirements of the application. Save the following in **deployment.yaml** file in the current directory.
-```bash 
-  ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: azkiflay-deployment
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: azkiflay-app
-  template:
-    metadata:
-      labels:
-        app: azkiflay-app
-    spec:                      
-      containers:
-      - name: busybox
-        image: busybox:1.34.1
-        command:
-          - sleep
-          - "3600"
-```
+Deployment allows you to manage the lifecycle of your application. It enables scaling up and down based on resource requirements of the application. Review the contents of the **deployment.yaml** as it is used in the following examples. To deploy the application based on the YAML configuration file, you can "**kubectl create -f deployment.yaml**".
 To create the deployment:
   ```bash
     kubectl create -f deployment.yaml
   ```
-Figure 13 shows the message returned after successful deployment.
-
 To Verify the deployment:
 ```bash
   kubectl create -f deployment.yaml # Returns "azkiflay-deployment" already exists
   kubectl get all  # Show all resources in current namespace
 ```
-To scale up or scale down the deployment:
+Figure 12 shows the message returned after successful deployment of the busybox image on the EKS cluster. Note that in this case the deployment is made using the YAML file, not by running the container image directly.
+<p align="left">
+  <img src="figures/eks_deployment_3.png" style="max-width:50%; height:auto;">
+  </p>
+  <p align="left"><strong>Figure 12:</strong> Deployment on EKS cluster </p>
+
+Using a YAML file for is convenient for scaling up and scaling down the deployment based on current needs of the application. For instance, the following examples show how the deployment can scaled up and down by changing the values for "**--replicas**" option in the *kubectl* command.
 ```bash
   kubectl scale deployment azkiflay-deployment --replicas=3
-  kukectl get all
+  kubectl get all
   kubectl scale deployment azkiflay-deployment --replicas=1
-  kukectl get all
+  kubectl get all
   kubectl rollout status deployment/azkiflay-deployment
 ```
 
+The effect of scaling up and down using the "*--replicas*" option is shown Figure 13.
+<p align="left">
+  <img src="figures/eks_deployment_4.png" style="max-width:50%; height:auto;">
+  </p>
+  <p align="left"><strong>Figure 13:</strong> Scaling up and down </p>
 
 ## Service Objects to Expose Applications
 
