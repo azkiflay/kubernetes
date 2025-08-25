@@ -122,7 +122,7 @@ The EKS worker plane includes the following: </br>
 - **Cluster Security Group**: virtual firewall to control traffic between the control plane and worker plane.
   
 # Creating EKS Cluster
-EKS clusters can be created and managed using Terraform, AWS Console, AWS CLI, eksctl. While Terraform is an Infrastructure as Code (IaC) tool that can be used across multiple cloud service providers, the other tools are tools specific to Amazon.
+EKS clusters can be created and managed using Terraform, AWS console, AWS CLI, *eksctl*. While Terraform is an Infrastructure as Code (IaC) tool that can be used across multiple cloud service providers, AWS CLI, AWS console and eksctl are tools specific to Amazon.
 ## IAM user for EKS 
 To create and manage your EKS clusters, you need to create an IAM user with relevant permissions. One way to do that easily is to create an administrator account on AWS Console as shown in Figure 1 below.
     <p align="left">
