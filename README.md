@@ -404,11 +404,6 @@ As shown in Figure 11, the busybox has been deployed on the EKS cluster.
   </figure>
 
 
-<p align="left">
-  <img src="figures/eks_deployment_1.png" style="max-width:50%; height:auto;">
-  </p>
-  <p align="left"><strong>Figure 11:</strong> Busybox on EKS cluster </p>
-
 Finally, you can delete the Pod.
 ```bash
   kubectl delete pod busybox
