@@ -350,7 +350,7 @@ Furthermore, the EKS dashboard is viewable from the organization's AWS managemen
   - Create the user and enable AWS console access.
   - Attach policy to the user. For example, **AmazonEKSClusterPolicy**, **AmazonEKSServicePolicy**, and **AmazonEC2ReadOnlyAccess**.
 * Step 3: Login from the delegated account to view the EKS Dashboard.
-
+* **Note**: On the AWS console, the EKS cluster will be visible on the AWS region it is created. Therefore, you may need to change to the region to be able to see the EKS cluster on the AWS management console.
 
 # Deploying Applications on EKS Cluster
 Generally, applications are deployed using one or more containers in Kubernetes. Similarly, application deployment in EKS is composed of Kubernetes components across different worker nodes. While some services are used inside the EKS cluster, others are exposed for external access.
