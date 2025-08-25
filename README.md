@@ -273,17 +273,16 @@ Terraform is an Infrastructure as Code (IaC) tool developed by HashiCorp. It is 
 
 Firstly, Terraform provides *unified workflow* management when other AWS infrastructure components are also deployed using Terraform. Secondly, Terraform enables *full lifecycle management* by creating, updating and deleting resources easily. Thirdly, Terraform determines resource dependency graphs before creating the EKS cluster.
 
-One of the easiest ways to create an EKS cluster is using a [HashiCorp's example for creating an EKS cluster](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks). The Terraform configuration file creates an EKS cluster by creating various resources, including security groups, worker nodes, VPC, and related roles and permissions. Details of the repository file are available in the *learn-terraform-provision-eks-cluster* subdirectory.
+One of the easiest ways to create an EKS cluster is using a [HashiCorp's example for creating an EKS cluster](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks). The Terraform configuration file creates an EKS cluster by creating various resources, including security groups, worker nodes, VPC, and related roles and permissions. The following examples are customized based on the aforementioned HashiCorp Terraform for EKS repository.
 
 The following demonstrates how EKS clusters can be created using Terraform. </br>
 **WARNING:** YOU WILL BE CHARGED when you execute these commands, according to [Amazon EKS pricing](https://aws.amazon.com/eks/pricing/). Therefore, remember to issue "**terrafrom destroy**" after you are done with your experimentation so that you DO NOT LEAVE any EKS cluster running.
 
   ```bash
-    git clone https://github.com/hashicorp/learn-terraform-provision-eks-cluster
-    cd learn-terraform-provision-eks-cluster/ 
+    git clone https://github.com/azkiflay/kubernetes.git
+    cd kubernetes 
     terraform init
-    terraform plan
-    terraform apply
+    terraform apply -auto-approve
   ```
 
 Figure 4 displays the EKS cluster that was created according to the Terraform IaC code.
@@ -292,11 +291,33 @@ Figure 4 displays the EKS cluster that was created according to the Terraform Ia
   </p>
   <p align="left"><strong>Figure 4:</strong> EKS Cluster </p>
 
-The name of the EKS cluster starts with a "*education-eks-*", where the last eight characters of the name are randomly generated using the "*random_string*" resource in the HashiCorp code. Instead, a fixed name can be assigned for the EKS cluster in the **locals** block. For example by setting "**cluster_name = "azkiflay"**" in the locals block. The AWS region for the EKS cluster can be changed in the "*variables.tf*". For example, in this case the region has been set to "*eu-west-2*" (London).
+The name of the EKS cluster starts with a "*azkiflay-*", where the last eight characters of the name are randomly generated using the "*random_string*" resource adopted from the HashiCorp code. Accordingly, the EKS cluster name is created in the **locals** block. Similarly, the AWS region for the EKS cluster can be changed in the "*variables.tf*". In this case, the region has been set to "*eu-west-2*" (London).
 
 After the EKS is created, it can be managed using **EKS dashboard** or the **kubectl** tool. In the former, note that the EKS dashboard may be accessible from a specific region, as shown in Figure 2, which requests switching to the *us-east-1* region. Note that many other variables can be changed from their default values provided by the HashiCorp's Terraform configuration, but there are dependency factors that may cause errors due to version mismatch. 
 
 For example, in the "**eks**" module, changing the default "**cluster_version**" from its current default value of "**1.29**" to the latest version of **1.33**, while keeping "**ami_type = "AL2_x86_64"**" resulted in error due to lack of support for AL2_x86_64 in EKS/Kubernetes **1.33**. Note this may change in the future.
+
+Figure 9 displays the created EKS cluster, as well as example *kubectl* commands such as **kubectl get nodes** to show the number of worker nodes that were attached to the EKS cluster.
+<p align="left">
+  <img src="figures/eks_cluster_kubectl_3.png" style="max-width:50%; height:auto;">
+  </p>
+  <p align="left"><strong>Figure 4:</strong> Kubectl commands </p>
+
+  <figure>
+  <table>
+    <tr>
+      <td>
+        <img src="figures/eks_terraform_2.png" style="max-width:100%; height:auto;">
+      </td>
+      <td>
+        <img src="figures/eks_terraform_3.png" style="max-width:100%; height:auto;">
+      </td>
+    </tr>
+  </table>
+  <figcaption><strong>Figure 8: </strong> The EKS cluster and nodes </figcaption>
+  </figure>
+
+
   <p align="left">
   <img src="figures/eks_admin_dashboard_1.png" style="max-width:50%; height:auto;">
   </p>
@@ -305,17 +326,12 @@ For example, in the "**eks**" module, changing the default "**cluster_version**"
 Various other details of the EKS cluster can be accessed via the dashboard. However, one of the most efficient ways to access and manage a K8s cluster is using the **kubectl**.
 
   ```bash
-  aws eks --region $(terraform output -raw region) update-kubeconfig \ 
-    --name $(terraform output -raw cluster_name)
+  aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)
   kubectl cluster-info
   kubectl get nodes
   ```
 
-Figure 4 displays example *kubectl* commands such as **kubectl get nodes**, which shows the number of worker nodes that were attached to the EKS cluster.
-<p align="left">
-  <img src="figures/eks_cluster_kubectl_3.png" style="max-width:50%; height:auto;">
-  </p>
-  <p align="left"><strong>Figure 4:</strong> Kubectl commands </p>
+
 
 Finally, when there EKS cluster is no longer required, you can delete it using **terraform destroy**. You need to confirm the deletion by typing **yes**. Alternatively, if you are certain about what is to be deleted and you want to proceed with the deletion of the EKS cluster, you can simply issue **terraform destroy -auto-approve**.
   ```bash
@@ -337,8 +353,6 @@ The EKS dashboard is viewable from the organization's AWS management and delegat
 * Step 3: Login from the delegated account to view the EKS Dashboard.
 
 
-
-
 # Deploying Applications on EKS Cluster
 Generally, applications are deployed using one or more containers in Kubernetes. Similarly, application deployment in EKS is composed of Kubernetes components across different worker nodes. While some services are used inside the EKS cluster, others are exposed for external access.
 
@@ -349,14 +363,13 @@ Generally, applications are deployed using one or more containers in Kubernetes.
   kubectl version
 ```
 ## Pods
-Specifically, applications run inside containers, which are in turn organized in Pods. One or more containers sharing the same namespace form a Pod in Kubernetes.
+In EKS and other Kubernetes services, applications run inside containers, which are in turn organized in Pods. One or more containers sharing the same namespace form a Pod in Kubernetes. To interact with the cluster, **kubectl** is used by an EKS administrator to deploy, update, or delete applications on the cluster. 
 
-To interact with the cluster, **kubectl** is used by an EKS administrator to deploy, update, or delete applications on the cluster. To facilitate the communication of the **kubectl** tool with the API server, the certificate, DNS name and other details can be configured in the local host's "**$HOME/.kube** directory as shown below.
+To facilitate the communication of the **kubectl** tool with the API server, the certificate, DNS name and other details can be configured in the local host's "**$HOME/.kube** directory as shown below.
 ```bash
   aws eks update-kubeconfig --name azkiflay --region us-east-1
 ```
 Figure 10 shows ...
-
 
 
 To view the Kubernetes objects being created before it is sent to the API server, its manifest file can be reviewed as follows.
