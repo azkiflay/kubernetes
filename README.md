@@ -9,7 +9,7 @@
   - [EKS Architecture](#eks-architecture)
 - [Creating EKS Cluster](#creating-eks-cluster)
   - [IAM user for EKS](#iam-user-for-eks)
-  - [EKS Cluster with AWS Console](#eks-cluster-with-aws-console)
+  - [EKS with AWS Console](#eks-with-aws-console)
   - [EKS with eksctl](#eks-with-eksctl)
   - [EKS with Terraform](#eks-with-terraform)
 - [Deploying Applications on EKS Cluster](#deploying-applications-on-eks-cluster)
@@ -130,7 +130,7 @@ To create and manage your EKS clusters on AWS, you need to create an IAM user wi
     </p>
     <p align="left"><strong>Figure 1:</strong> Creating IAM user for EKS administration </p>
 
-## EKS Cluster with AWS Console
+## EKS with AWS Console
 You can create your EKS cluster using the AWS management console. There are required fields to create the EKS cluster, which are highlighted below with examples.
 
 First, create "*Cluster IAM*" role and "*Node IAM*" role. The rest of the cluster configuration includes "*Name*", "*Kubernetes version*", "*VPC*", and "*Subnets*". Many of these are initialized with default values, but they can be changed, if necessary.
