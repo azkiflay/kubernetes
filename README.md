@@ -297,21 +297,11 @@ The name of the EKS cluster starts with a "*education-eks-*", where the last eig
 After the EKS is created, it can be managed using **EKS dashboard** or the **kubectl** tool. In the former, note that the EKS dashboard may be accessible from a specific region, as shown in Figure 2, which requests switching to the *us-east-1* region. Note that many other variables can be changed from their default values provided by the HashiCorp's Terraform configuration, but there are dependency factors that may cause errors due to version mismatch. 
 
 For example, in the "**eks**" module, changing the default "**cluster_version**" from its current default value of "**1.29**" to the latest version of **1.33**, while keeping "**ami_type = "AL2_x86_64"**" resulted in error due to lack of support for AL2_x86_64 in EKS/Kubernetes **1.33**. Note this may change in the future.
-    <p align="left">
-    <img src="figures/eks_admin_dashboard_1.png" style="max-width:50%; height:auto;">
-    </p>
-    <p align="left"><strong>Figure 2:</strong> Switching to the default region to access EKS Dashboard </p>
+  <p align="left">
+  <img src="figures/eks_admin_dashboard_1.png" style="max-width:50%; height:auto;">
+  </p>
+  <p align="left"><strong>Figure 2:</strong> Switching to the default region to access EKS Dashboard </p>
 
-The EKS dashboard is viewable from the organization's AWS management and delegated administrator accounts. Particularly, specific steps need to be taken to enable and view the EKS dashboard as displayed in Figure 2.
-    <p align="left">
-    <img src="figures/eks_admin_dashboard_2.png" style="max-width:50%; height:auto;">
-    </p>
-    <p align="left"><strong>Figure 1:</strong> Enabling the EKS Dashboard </p>
-* Step 1: Enable Trusted Access
-* Step 2: Assign delegated administrator for the EKS. The account from which you are making the delegation cannot be delegated.
-  - Create the user and enable AWS console access.
-  - Attach policy to the user. For example, **AmazonEKSClusterPolicy**, **AmazonEKSServicePolicy**, and **AmazonEC2ReadOnlyAccess**.
-* Step 3: Login from the delegated account to view the EKS Dashboard.
 
 
 Various other details of the EKS cluster can be accessed via the dashboard. However, one of the most efficient ways to access and manage a K8s cluster is using the **kubectl**.
@@ -336,6 +326,20 @@ Finally, when there EKS cluster is no longer required, you can delete it using *
   ```bash
     terraform destroy -auto-approve
   ```
+
+The EKS dashboard is viewable from the organization's AWS management and delegated administrator accounts. Particularly, specific steps need to be taken to enable and view the EKS dashboard as displayed in Figure 2.
+    <p align="left">
+    <img src="figures/eks_admin_dashboard_2.png" style="max-width:50%; height:auto;">
+    </p>
+    <p align="left"><strong>Figure 1:</strong> Enabling the EKS Dashboard </p>
+* Step 1: Enable Trusted Access
+* Step 2: Assign delegated administrator for the EKS. The account from which you are making the delegation cannot be delegated.
+  - Create the user and enable AWS console access.
+  - Attach policy to the user. For example, **AmazonEKSClusterPolicy**, **AmazonEKSServicePolicy**, and **AmazonEC2ReadOnlyAccess**.
+* Step 3: Login from the delegated account to view the EKS Dashboard.
+
+
+
 
 # Deploying Applications on EKS Cluster
 Generally, applications are deployed using one or more containers in Kubernetes. Similarly, application deployment in EKS is composed of Kubernetes components across different worker nodes. While some services are used inside the EKS cluster, others are exposed for external access.
