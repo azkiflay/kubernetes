@@ -269,7 +269,9 @@ Figure 8 shows the results of "**kubectl get nodes**", and the "**eksctl delete 
   </figure>
 
 ## EKS with Terraform
-Terraform is an Infrastructure as Code (IaC) tool developed by HashiCorp. It is one of the most widely used IaC tools to deploy and manage cloud-based infrastructure, including Amazon EKS. Using Terraform to create and manage EKS clusters has advantages over other options. Firstly, Terraform provides *unified workflow* management when other AWS infrastructure components are also deployed using Terraform. Secondly, Terraform enables *full lifecycle management* by creating, updating and deleting resources easily. Thirdly, Terraform determines resource dependency graphs before creating the EKS cluster.
+Terraform is an Infrastructure as Code (IaC) tool developed by HashiCorp. It is one of the most widely used IaC tools to deploy and manage cloud-based infrastructure, including Amazon EKS. Using Terraform to create and manage EKS clusters has advantages over other options. 
+
+Firstly, Terraform provides *unified workflow* management when other AWS infrastructure components are also deployed using Terraform. Secondly, Terraform enables *full lifecycle management* by creating, updating and deleting resources easily. Thirdly, Terraform determines resource dependency graphs before creating the EKS cluster.
 
 One of the easiest ways to create an EKS cluster is using a [repository](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks) provided by HashiCorp. The Terraform configuration provisions security groups, Virtual Private Cloud (VPC), and an EKS cluster. 
 
