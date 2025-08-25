@@ -253,7 +253,7 @@ Lastly, it is also easy to delete the EKS cluster as shown in the following.
 ```bash
   eksctl delete cluster --name azkiflay --region us-east-1
 ```
-Figure 9 shows the results of "**kubectl get nodes**", and the "**eksctl delete ...**" commands above.
+Figure 8 shows the results of "**kubectl get nodes**", and the "**eksctl delete ...**" commands above. As can be seen on the right side of Figure 8, all cluster resources were deleted.
 <figure>
   <table>
     <tr>
@@ -265,9 +265,8 @@ Figure 9 shows the results of "**kubectl get nodes**", and the "**eksctl delete 
       </td>
     </tr>
   </table>
-  <figcaption><strong>Figure 8: </strong> Using eksctl to create an EKS cluster  </figcaption>
+  <figcaption><strong>Figure 8: </strong> View worker nodes and deleting the EKS cluster  </figcaption>
   </figure>
-As can be seen on the right side of the figure, all cluster resources were deleted.
 
 ## EKS with Terraform
 Terraform is an Infrastructure as Code (IaC) tool developed by HashiCorp. It is one of the widely used IaC tools to deploy and delete AWS infrastructure including EKS. Using Terraform for EKS clusters has advantages over other options. Firstly, Terraform provides *unified workflow* management when other AWS infrastructure components are also deployed using Terraform. Secondly, Terraform enables *full lifecycle management* by creating, updating and deleting resources easily. Thirdly, Terraform determines resource dependency graphs before creating the EKS cluster.
