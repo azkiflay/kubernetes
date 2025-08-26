@@ -25,6 +25,7 @@
   - [Helm to Manage a Kubernetes Application](#helm-to-manage-a-kubernetes-application)
     - [Installing Helm](#installing-helm)
     - [Using Helm to Install an Nginx Ingress Controller](#using-helm-to-install-an-nginx-ingress-controller)
+    - [Helm to Deploy Applications](#helm-to-deploy-applications)
     - [Nginx Deployment and Service](#nginx-deployment-and-service)
 - [References](#references)
 # Introduction
@@ -595,8 +596,32 @@ The results of the above helm commands are shown in Figure 16 below.
       </td>
     </tr>
   </table>
-  <figcaption><strong>Figure 11: </strong> Helm </figcaption>
+  <figcaption><strong>Figure 16: </strong> Using Helm to Install Nginx Ingress Controller </figcaption>
   </figure>
+
+### Helm to Deploy Applications
+Apart from deploying applications from public repositories, Helm can be used to deploy newly created applications on the EKS cluster. For example, the following command creates necessary files for deployment such as "**values.yaml**", "**Charts.yaml**", "**charts/**", "**templates/**", and "**.helmignore**".
+```bash
+  helm create nginx-helm-chart
+  helm install nginx ./nginx-helm-chart --set service.type=NodePort
+```
+
+In the above example, while "**helm create ...** deploys nginx with default settings, it is easy to update the deployment using *helm*. For instance, the "**helm install ... --set service.type=NodePort**" exposes the service outside the cluster.
+
+```bash
+  # values.yaml <-- replicaCount: 2
+  # Chart.yaml <-- version: 0.2.0
+  cd nginx-helm-chart
+  helm lint
+  helm upgrade nginx
+```
+
+As can be seen in Figure 17, the it was possible to easily change the deployed *nginx* using Helm.
+<p align="left">
+  <img src="figures/eks_helm_3.png" style="max-width:50%; height:auto;">
+  </p>
+  <p align="left"><strong>Figure 15:</strong> Upgrading Deployment Using Helm </p>
+
 
 ### Nginx Deployment and Service
 ```bash
