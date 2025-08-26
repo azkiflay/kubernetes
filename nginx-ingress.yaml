@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: nginx-ingress
   annotations:
-    kubernetes.io/ingress.class: alb
+    kubernetes.io/spec.ingressClassName: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
 spec:
   rules:

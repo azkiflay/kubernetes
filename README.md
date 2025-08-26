@@ -22,6 +22,9 @@
   - [Ingress to Expose Services](#ingress-to-expose-services)
     - [Installing an Ingress Controller](#installing-an-ingress-controller)
     - [AWS Loadbalancer](#aws-loadbalancer)
+  - [Helm to Manage a Kubernetes Application](#helm-to-manage-a-kubernetes-application)
+    - [Installing Helm](#installing-helm)
+    - [Using Helm to Install an Nginx Ingress Controller](#using-helm-to-install-an-nginx-ingress-controller)
     - [Nginx Deployment and Service](#nginx-deployment-and-service)
 - [References](#references)
 # Introduction
@@ -519,6 +522,12 @@ To install and verify the Nginx Ingress controller without cloud/AWS extensions:
 ### AWS Loadbalancer
 To configure an AWS loadbalancer in such a way that it is updated when the Ingress controller scales or changes:
 ```bash
+  # Configure AWS CLI & IAM user
+  aws configure --profile edom # Configure access keys and region
+  export AWS_PROFILE=edom # Set default user
+  terraform plan
+  terraform apply -auto-approve
+  aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)
   # Delete previously deployed ingress
   kubectl delete -f ingress.yaml
   kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/baremetal/deploy.yaml
@@ -534,9 +543,68 @@ To configure an AWS loadbalancer in such a way that it is updated when the Ingre
   curl -H 'Host: azkiflay.com' http://.../login
 ```
 
+## Helm to Manage a Kubernetes Application
+Using YAML manifest files is convenient to deploy and manage applications on the EKS cluster. Except that you must change the YAML file or create new ones to make changes to applications running on the cluster. Because the manifest files are fixed until they are changed. Particularly, it is not easy to use the same manifest file for development, stating and production. For example, if you want to run multiple versions of the manifest file by assigning different tags, you would have to create new manifest files for each with different tags. The result is multiple manifest files that are nearly identical except for their tags. 
+
+**Helm** is a tool that can be used to customize deployments for various environments. *Helm* is a package manager for Kubernetes. It simplifies Kubernetes resource creation and deployment. The components of Helm are **Charts**, **Releases**, **Repositories**, and **Helm binary**. There are other alternatives to Helm such as [Kustomize](https://kustomize.io/).
+
+### Installing Helm
+Helm can be installed according to the [documentation](https://helm.sh/docs/intro/install/. The script-based installation is summarized below.
+```bash
+  curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+  chmod 700 get_helm.sh
+  ./get_helm.sh
+```
+
+Another way to install Helm is using the package manager. Note that if the above script-based installation has worked for you, there is no need to install Helm again. If your prefer a package manager based installation or the script-based option didn't work in your platform, Helm can be installed as follows in Ubuntu.
+```bash
+  curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+  sudo apt-get install apt-transport-https --yes
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+  sudo apt-get update
+  sudo apt-get install helm
+```
+
+### Using Helm to Install an Nginx Ingress Controller
+Previously, the Nginx Ingress controller was install as follows:
+```bash
+  kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/baremetal/deploy.yaml
+```
+Now that Helm has been installed as the package manager for the EKS cluster, you can install the Nginx Ingress controller using Helm instead of the above kubectl command. First, remove the existing Nginx Ingress controller, if it has been installed in your cluster.
+```bash
+  kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/baremetal/deploy.yaml
+```
+To install the Nginx Ingress controller using Helm:
+```bash
+  helm repo add nginx-stable https://helm.nginx.com/stable
+  helm repo update
+  helm search repo nginx-stable
+  helm install my-release nginx-stable/nginx-ingress
+  helm list
+  helm history my-release
+```
+The results of the above helm commands are shown in Figure 16 below.
+<figure>
+  <table>
+    <tr>
+      <td>
+        <img src="figures/eks_helm_1.png" style="max-width:100%; height:auto;">
+      </td>
+      <td>
+        <img src="figures/eks_helm_2.png" style="max-width:100%; height:auto;">
+      </td>
+    </tr>
+  </table>
+  <figcaption><strong>Figure 11: </strong> Helm </figcaption>
+  </figure>
+
 ### Nginx Deployment and Service
 ```bash
+  aws configure --profile edom # Configure access keys and region
+  export AWS_PROFILE=edom # Set default user
   # Configuring kubectl
+  terraform plan
+  terraform apply -auto-approve
   aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)
   kubectl cluster-info
   kubectl get nodes
@@ -544,8 +612,8 @@ To configure an AWS loadbalancer in such a way that it is updated when the Ingre
   kubectl apply -f nginx-deployment.yaml
   kubectl apply -f nginx-service.yaml
   kubectl apply -f nginx-ingress.yaml
+  kubectl get ingress nginx-ingress # TODO: Check if external IP is accessible.
   kubectl get svc nginx-service
-  kubectl get ingress nginx-ingress
 ```
 
 
