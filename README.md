@@ -636,7 +636,7 @@ As can be seen in Figure 17, the it was possible to easily change the deployed *
     </tr>
   </table>
   <figcaption><strong>Figure 17: </strong> Deployment Upgrade and Rollback Using Helm </figcaption>
-  </figure>
+  </figure> 
 
 ### Nginx Deployment and Service
 ```bash
