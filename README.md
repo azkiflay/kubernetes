@@ -614,8 +614,10 @@ In the above example, while "**helm create ...** deploys nginx with default sett
   cd nginx-helm-chart
   helm lint
   helm upgrade nginx .
-  helm list --all-namespaces
+  helm history nginx
   kubectl get pod | grep nginx
+  helm list --all-namespaces
+  
   helm history nginx
   helm rollback nginx 2
 ```
