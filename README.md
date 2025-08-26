@@ -22,6 +22,7 @@
   - [Ingress to Expose Services](#ingress-to-expose-services)
     - [Installing an Ingress Controller](#installing-an-ingress-controller)
     - [AWS Loadbalancer](#aws-loadbalancer)
+    - [Nginx Deployment and Service](#nginx-deployment-and-service)
 - [References](#references)
 # Introduction
 Multiple Operating Systems (OSes) are able to run on a single server through virtualization solutions such as VMware, Xen, VirtualBox. Containerization tools (e.g., Docker) took hardware-level virtualization to the next level. Because containers provide OS-level virtualization, making application that run in containers to be self-contained. However, while containers solve problems, including package conflict and dependency, managing several containerized applications is not easy. While containers make it possible to deploy applications easily, managing so many of them created difficult. That's the where the need for container orchestration comes in, to create, deploy and manage thousands of containers. 
@@ -287,6 +288,7 @@ The following demonstrates how EKS clusters can be created using Terraform. </br
     git clone https://github.com/azkiflay/kubernetes.git
     cd kubernetes 
     terraform init
+    terraform plan
     terraform apply -auto-approve
   ```
 
@@ -529,7 +531,18 @@ To configure an AWS loadbalancer in such a way that it is updated when the Ingre
   kubectl get ing kiada -o yaml
   aws elbv2 describe-load-balancers
   # Re-deploy the Ingress manifest
-  curl -H 'Host: myweb.packt.com' http://.../login
+  curl -H 'Host: azkiflay.com' http://.../login
+```
+
+### Nginx Deployment and Service
+```bash
+  kubectl apply -f nginx-deployment.yaml
+  kubectl apply -f nginx-service.yaml
+  kubectl apply -f nginx-ingress.yaml
+  kubectl get svc nginx-service
+  kubectl get ingress nginx-ingress
+
+
 ```
 
 
