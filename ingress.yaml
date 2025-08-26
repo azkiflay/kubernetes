@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: azkiflay-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: azkiflay.com
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: azkiflay-api-service
+                port:
+                  number: 80
+          - path: /frontend
+            pathType: Prefix
+            backend:
+              service:
+                name: azkiflay-frontend-service
+                port:
+                  number: 80

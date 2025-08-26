@@ -18,6 +18,10 @@
   - [Busybox](#busybox)
   - [Creating a Deployment](#creating-a-deployment)
   - [Service Objects to Expose Applications](#service-objects-to-expose-applications)
+    - [LoadBalancer Service](#loadbalancer-service)
+  - [Ingress to Expose Services](#ingress-to-expose-services)
+    - [Installing an Ingress Controller](#installing-an-ingress-controller)
+    - [AWS Loadbalancer](#aws-loadbalancer)
 - [References](#references)
 # Introduction
 Multiple Operating Systems (OSes) are able to run on a single server through virtualization solutions such as VMware, Xen, VirtualBox. Containerization tools (e.g., Docker) took hardware-level virtualization to the next level. Because containers provide OS-level virtualization, making application that run in containers to be self-contained. However, while containers solve problems, including package conflict and dependency, managing several containerized applications is not easy. While containers make it possible to deploy applications easily, managing so many of them created difficult. That's the where the need for container orchestration comes in, to create, deploy and manage thousands of containers. 
@@ -491,6 +495,46 @@ To delete the EKS cluster:
   terraform destroy -auto-approve
 ```
 Alternatively, you can use "**eksctl**" to delete the cluster. However, you need to provide the cluster name and other parameters to the *eksctl* tool, making this option less efficient. In Terraform, you do not have to remember these details as they are retrieved from the state file.
+
+### LoadBalancer Service
+
+
+## Ingress to Expose Services
+LoadBalancer type exposes a **single service** to clients external to the EKS cluster. What if you want to externally expose several services, which each require its own public IP address? This is address by **Ingress object**, which assigns a single public IP address to the services. Additional features of Ingress object include cookie-based session management, URL re-writing, HTTP authentication, which are not available in Service objects.
+
+Ingress is a method that can be used by external clients to access services of applications deployed in an EKS/Kubernetes cluster. Ingress has three parts, namely, **ingress object** for configuration, **L7 load balancer (reverse proxy)** for re-routing traffic to backend services, and **ingress controller**, which connects to the API server and monitors the former two. Put simply, *Ingress* provides a central access point to multiple services running in the cluster.
+
+### Installing an Ingress Controller
+As *Ingress* is not provided by default as part of Kubernetes, it has to be installed first. To this end, you need to install an Ingress controller. There are multiple [options to choose from](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/). One of the popular ones is the [Nginx Ingress controller](https://www.f5.com/products/nginx/nginx-ingress-controller).
+
+To install and verify the Nginx Ingress controller without cloud/AWS extensions:
+```bash
+  kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/baremetal/deploy.yaml
+  kubectl get service ingress-nginx-controller --namespace=ingress-nginx
+  curl -H 'Host: azkiflay.com' http://<WORKERNODEIP>:31371/login
+```
+
+### AWS Loadbalancer
+To configure an AWS loadbalancer in such a way that it is updated when the Ingress controller scales or changes:
+```bash
+  # Delete previously deployed ingress
+  kubectl delete -f ingress.yaml
+  kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/baremetal/deploy.yaml
+  # Deploy Nginx Ingress controller integrated with AWS loadbalancer
+  kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/aws/deploy.yaml
+  # Review the Ingress controller
+  kubectl describe service ingress-nginx-controller --namespace=ingress- nginx
+  kubectl get ingresses # get public IP address
+  kubectl describe ing azkiflay.com
+  kubectl get ing kiada -o yaml
+  aws elbv2 describe-load-balancers
+  # Re-deploy the Ingress manifest
+  curl -H 'Host: myweb.packt.com' http://.../login
+```
+
+
+
+
 
 # References
 * Kubernetes documentation: https://kubernetes.io/docs/
