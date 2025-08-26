@@ -638,10 +638,10 @@ As can be seen in Figure 17, the it was possible to easily change the deployed *
   <figcaption><strong>Figure 17: </strong> Deployment Upgrade and Rollback Using Helm </figcaption>
   </figure> 
 
-To remove the deployed application and Helm charts:
+To remove the deployed application and Helm charts. Moreover, you can delete the EKS cluster to stop being charged for it. Thanks to Terraform, the EKS cluster can be easily created when it is required for the next round of experimentation on your EKS cluster.
 ```bash
   helm uninstall nginx
-  helm uninstall
+  terraform destroy -auto-approve
 ```
 
 ### Nginx Deployment and Service
