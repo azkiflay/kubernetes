@@ -536,13 +536,16 @@ To configure an AWS loadbalancer in such a way that it is updated when the Ingre
 
 ### Nginx Deployment and Service
 ```bash
+  # Configuring kubectl
+  aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)
+  kubectl cluster-info
+  kubectl get nodes
+  # Nginx
   kubectl apply -f nginx-deployment.yaml
   kubectl apply -f nginx-service.yaml
   kubectl apply -f nginx-ingress.yaml
   kubectl get svc nginx-service
   kubectl get ingress nginx-ingress
-
-
 ```
 
 
