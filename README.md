@@ -662,7 +662,7 @@ To remove the deployed application and Helm charts. Moreover, you can delete the
   kubectl get svc nginx-service
 ```
 
-The "**kubectl get svc nginx-service** command above returns the public IP address for the Nginx webserver. Since the service has been exposed for external access, it is indeed reachable over the Internet as shown in Figure 18.
+The "**kubectl get svc nginx-service**" command above returns the public IP address for the Nginx webserver. Since the service has been exposed for external access, it is indeed reachable over the Internet as shown in Figure 18.
 
   <p align="left">
   <img src="figures/eks_nginx_service_1.png" style="max-width:50%; height:auto;">
