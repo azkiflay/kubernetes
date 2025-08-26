@@ -613,15 +613,28 @@ In the above example, while "**helm create ...** deploys nginx with default sett
   # Chart.yaml <-- version: 0.2.0
   cd nginx-helm-chart
   helm lint
-  helm upgrade nginx
+  helm upgrade nginx .
+  helm list --all-namespaces
+  kubectl get pod | grep nginx
+  helm history nginx
+  helm rollback nginx 2
 ```
 
-As can be seen in Figure 17, the it was possible to easily change the deployed *nginx* using Helm.
-<p align="left">
-  <img src="figures/eks_helm_3.png" style="max-width:50%; height:auto;">
-  </p>
-  <p align="left"><strong>Figure 15:</strong> Upgrading Deployment Using Helm </p>
+As can be seen in Figure 17, the it was possible to easily change the deployed *nginx* using Helm. Moreover, rolling back to an earlier version of the deployment can be done easily using Helm. For example, "**helm rollback nginx 2**" rolls back the deployment to version 2. More details can be seen in Figure 17.
 
+<figure>
+  <table>
+    <tr>
+      <td>
+        <img src="figures/eks_helm_3.png" style="max-width:100%; height:auto;">
+      </td>
+      <td>
+        <img src="figures/eks_helm_4.png" style="max-width:100%; height:auto;">
+      </td>
+    </tr>
+  </table>
+  <figcaption><strong>Figure 17: </strong> Deployment Upgrade and Rollback Using Helm </figcaption>
+  </figure>
 
 ### Nginx Deployment and Service
 ```bash
