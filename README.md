@@ -638,6 +638,12 @@ As can be seen in Figure 17, the it was possible to easily change the deployed *
   <figcaption><strong>Figure 17: </strong> Deployment Upgrade and Rollback Using Helm </figcaption>
   </figure> 
 
+To remove the deployed application and Helm charts:
+```bash
+  helm uninstall nginx
+  helm uninstall
+```
+
 ### Nginx Deployment and Service
 ```bash
   aws configure --profile edom # Configure access keys and region
